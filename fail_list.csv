@@ -1,0 +1,170 @@
+,Accession,Source Database,Name,Experiment Type,Resolution,Chains,Proteins,Protein Length,Structure Location,matches,Downloaded
+5244,6BCU,pdb,Cryo-EM structure of the activated RHEB-mTORC1 refined to 3.4 angstrom,em,3.8,A;B,p42345;p42345,2549;2549,;,2095..2451;2095..2451,False
+5245,6BCX,pdb,mTORC1 structure refined to 3.0 angstroms,em,3.23,A;B,p42345;p42345,2549;2549,;,2095..2451;2095..2451,False
+5957,6Q38,pdb,The Crystal structure of CK2a bound to P1-C4,x-ray,1.74,A,,,,,False
+5974,6Q4Q,pdb,The Crystal structure of CK2a bound to P2-C4,x-ray,1.45,A;B,;,;,;,;,False
+6020,6QX9,pdb,Structure of a human fully-assembled precatalytic spliceosome (pre-B complex).,em,3.28,K,q13523,1007,,674..1005,False
+6146,6T28,pdb,Crystal structure of human calmodulin-dependent protein kinase 1D (CAMK1D) bound to compound 19 (CS640),x-ray,1.55,AAA,q8iu85,385,,16..307,False
+6147,6T29,pdb,Crystal structure of human calmodulin-dependent protein kinase 1D (CAMK1D) bound to compound 18 (CS587),x-ray,1.484,AAA,q8iu85,385,,16..307,False
+6187,6TLU,pdb,"HUMAN CK2 KINASE ALPHA SUBUNIT IN COMPLEX WITH THE ATP-COMPETITIVE INHIBITOR 4,5-DIBROMOBENZOTRIAZOLE",x-ray,1.81,AAA,p68400,391,,5..328,False
+6407,6YKG,pdb,Structure-based exploration of selectivity for ATM inhibitors in Huntingtons disease,x-ray,3.12,AAA,q8neb9,887,,538..883,False
+6443,6YUL,pdb,CK2 alpha bound to Macrocycle,x-ray,2.4,AAA;GGG,p68400;p68400,391;391,;,5..328;5..328,False
+6444,6YUM,pdb,CK2 alpha bound to unclosed Macrocycle,x-ray,2.75,AAA;GGG,p68400;p68400,391;391,;,5..328;5..328,False
+6455,6Z1Q,pdb,MAP3K14 (NIK) in complex with DesF-3R/4076,x-ray,2.42,AAA;BBB,q99558;q99558,947;947,;,405..654;405..654,False
+6456,6Z1T,pdb,MAP3K14 (NIK) in complex with 4S/3694,x-ray,2.31,AAA;BBB,q99558;q99558,947;947,;,405..654;405..654,False
+6486,6Z83,pdb,CK2 alpha bound to chemical probe SGC-CK2-1,x-ray,2.171,AAA;BBB,p68400;p68400,391;391,;,5..328;5..328,False
+6487,6Z84,pdb,CK2 alpha bound to chemical probe SGC-CK2-1 derivative,x-ray,2.5,AAA;BBB,p68400;p68400,391;391,;,5..328;5..328,False
+6671,7BL1,pdb,human complex II-BATS bound to membrane-attached Rab5a-GTP,em,9.8,BBB;CCC,;,;,;,;,False
+6733,7EGB,pdb,TFIID-based holo PIC on SCP promoter,em,3.3,8,,,,,False
+6734,7EGC,pdb,p53-bound TFIID-based holo PIC on HDM2 promoter,em,3.9,8,,,,,False
+6737,7ENA,pdb,TFIID-based PIC-Mediator holo-complex in pre-assembled state (pre-hPIC-MED),em,4.07,8,,,,,False
+6738,7ENC,pdb,TFIID-based PIC-Mediator holo-complex in fully-assembled state (hPIC-MED),em,4.13,8,,,,,False
+6835,7KTS,pdb,"Negative stain EM structure of the human SAGA coactivator complex (TRRAP, core, splicing module)",em,19.09,A,f2z2u4,3848,,3422..3815,False
+6854,7LBM,pdb,Structure of the human Mediator-bound transcription pre-initiation complex,em,4.8,e,p50613,346,,8..299,False
+6885,7MF0,pdb,"Co-crystal structure of PERK with inhibitor (R)-2-amino-N-cyclopropyl-5-(4-(2-(3,5-difluorophenyl)-2-hydroxyacetamido)-2-methylphenyl)nicotinamide",x-ray,2.809,AAA,q9nzj5,1116,,587..1090,False
+6906,7MU6,pdb,Ask1 bound to compound 28,x-ray,2.165,A;B,q99683;q99683,1374;1374,;,685..939;685..939,False
+6928,7NB1,pdb,Crystal structure of human choline alpha in complex with an inhibitor,x-ray,2.3,AAA;BBB,p35790;p35790,457;457,;,82..455;82..455,False
+6929,7NB2,pdb,Crystal structure of human choline alpha in complex with an inhibitor,x-ray,2.4,AAA;BBB,p35790;p35790,457;457,;,82..455;82..455,False
+6930,7NB3,pdb,Crystal structure of human choline alpha in complex with an inhibitor,x-ray,2.0,AAA;BBB,p35790;p35790,457;457,;,82..455;82..455,False
+6964,7OA0,pdb,"Crystal structure of di-phosphorylated human CLK1 in complex with 5-(6,7-dichloro-1H-indol-3-yl)pyrimidin-4-amine",x-ray,1.81,AAA,p49759,484,,150..478,False
+6996,7OZB,pdb,"FGFR1 kinase domain (residues 458-765) with mutations C488A, C584S in complex with 38.",x-ray,1.71,AAA;BBB,p11362;p11362,822;822,;,468..754;468..754,False
+6997,7OZD,pdb,"FGFR1 kinase domain (residues 458-765) with mutations C488A, C584S in complex with 34.",x-ray,1.82,AAA;BBB,p11362;p11362,822;822,;,468..754;468..754,False
+6998,7OZF,pdb,"FGFR1 kinase domain (residues 458-765) with mutations C488A, C584S in complex with 19.",x-ray,1.82,AAA;BBB,p11362;p11362,822;822,;,468..754;468..754,False
+6999,7OZY,pdb,FGFR2 kinase domain (residues 461-763) in complex with 38.,x-ray,2.28,AAA;BBB,p21802;p21802,821;821,;,471..757;471..757,False
+7002,7P5Z,pdb,Structure of a DNA-loaded MCM double hexamer engaged with the Dbf4-dependent kinase,em,3.3,1,p06243,507,,13..475,False
+7020,7PI4,pdb,FAK Protac GSK215 in complex with FAK and pVHL:ElonginC:ElonginB,x-ray,2.24,DDD,q05397,1052,,409..693,False
+7031,7PQH,pdb,Cryo-EM structure of Saccharomyces cerevisiae TOROID (TORC1 Organized in Inhibited Domains).,em,3.87,E;F;H;K,p32600;p32600;p32600;p32600,2474;2474;2474;2474,;;;,2034..2470;2034..2470;2034..2470;2034..2470,False
+7035,7PT6,pdb,"Structure of MCM2-7 DH complexed with Cdc7-Dbf4 in the presence of ATPgS, state III",em,3.2,8;H,;,;,;,;,False
+7036,7PT7,pdb,"Structure of MCM2-7 DH complexed with Cdc7-Dbf4 in the presence of ADP:BeF3, state I",em,3.8,8,,,,,False
+7038,7PUS,pdb,ERK5 in complex with Pyrrole Carboxamide scaffold,x-ray,2.59,AAA,q13164,816,,48..356,False
+7048,7Q52,pdb,Crystal structure of S/T protein kinase PknG from Mycobacterium tuberculosis in complex with inhibitor L2W,x-ray,2.35,AAA,p9wi73,750,,131..402,False
+7049,7Q6H,pdb,HUMAN JAK3 KINASE DOMAIN WITH 1-(4-((2-((1-methyl-1H-pyrazol-4-yl)amino)quinazolin-8-yl)amino)piperidin-1-yl)ethan-1-one,x-ray,1.749,AAA,p52333,1124,,"508..788,820..1097",False
+7075,7QHW,pdb,TTBK1 kinase domain in complex with inhibitor 29,x-ray,2.8,AAA;CCC,q5tcy1;q5tcy1,1321;1321,;,30..311;30..311,False
+7218,7UXH,pdb,cryo-EM structure of the mTORC1-TFEB-Rag-Ragulator complex,em,3.2,A;C,p42345;p42345,2549;2549,;,2095..2451;2095..2451,False
+7233,7V3V,pdb,Cryo-EM structure of MCM double hexamer bound with DDK in State I,em,2.9,H,p06243,507,,13..475,False
+7304,7Z37,pdb,Structure of the RAF1-HSP90-CDC37 complex (RHC-II),em,3.67,CP1,p04049,648,,344..611,False
+7312,7Z6I,pdb,"Crystal structure of p38alpha C162S in complex with SB20358 and CAS 2094667-81-7 (behind catalytic site; Y35 in), P 21 21 21",x-ray,2.25,AAA,p47811,360,,9..349,False
+7318,7Z9T,pdb,"Crystal structure of p38alpha C162S in complex with ATPgS and CAS 2094667-81-7 (in catalytic site, Y35 out), P 1 21 1",x-ray,2.6,AAA;BBB,p47811;p47811,360;360,;,9..349;9..349,False
+7360,8ACM,pdb,Crystal structure of WT p38alpha,x-ray,2.14,AAA,p47811,360,,9..349,False
+7361,8ACO,pdb,Crystal structure of WT p38alpha,x-ray,2.65,AAA,p47811,360,,9..349,False
+7397,8ATB,pdb,Discovery of IRAK4 Inhibitor 16,x-ray,2.35,AAA;BBB,q9nwz3;q9nwz3,460;460,;,156..454;156..454,False
+7398,8ATL,pdb,Discovery of IRAK4 Inhibitor 23,x-ray,2.464,AAA;BBB,q9nwz3;q9nwz3,460;460,;,156..454;156..454,False
+7399,8ATN,pdb,Discovery of IRAK4 Inhibitor 38,x-ray,2.171,AAA;BBB,q9nwz3;q9nwz3,460;460,;,156..454;156..454,False
+7423,8BH3,pdb,DNA-PK Ku80 mediated dimer bound to PAXX,em,4.55,A;S,p78527;p78527,4128;4128,;,3657..4049;3657..4049,False
+7424,8BHV,pdb,DNA-PK XLF mediated dimer bound to PAXX,em,4.51,A;F,p78527;p78527,4128;4128,;,3657..4049;3657..4049,False
+7425,8BHY,pdb,DNA-PK Ku80 mediated dimer bound to PAXX and XLF,em,5.33,A;S,p78527;p78527,4128;4128,;,3657..4049;3657..4049,False
+7445,8BOT,pdb,Cryo-EM structure of NHEJ supercomplex(trimer),em,7.76,A;F;S,p78527;p78527;p78527,4128;4128;4128,;;,3657..4049;3657..4049;3657..4049,False
+7448,8BR5,pdb,Discovery of IRAK4 Inhibitor 41,x-ray,2.7,AAA;BBB;CCC;DDD,q9nwz3;q9nwz3;q9nwz3;q9nwz3,460;460;460;460,;;;,156..454;156..454;156..454;156..454,False
+7449,8BR6,pdb,Discovery of IRAK4 Inhibitor 40,x-ray,2.167,AAA;BBB,q9nwz3;q9nwz3,460;460,;,156..454;156..454,False
+7450,8BR7,pdb,Discovery of IRAK4 Inhibitors BAY1834845 and BAY1830839,x-ray,2.119,AAA;BBB,q9nwz3;q9nwz3,460;460,;,156..454;156..454,False
+7479,8BVW,pdb,RNA polymerase II pre-initiation complex with the distal +1 nucleosome (PIC-Nuc18W),em,4.0,8,,,,,False
+7486,8BYQ,pdb,RNA polymerase II pre-initiation complex with the proximal +1 nucleosome (PIC-Nuc10W),em,4.1,8,p50613,346,,8..299,False
+7496,8C12,pdb,Identification of an intermediate activation state of PAK5 reveals a novel mechanism of kinase inhibition.,x-ray,1.549,AAA,,,,,False
+7521,8CBJ,pdb,Cryo-EM structure of Otu2-bound cytoplasmic pre-40S ribosome biogenesis complex,em,3.8,l,p40160,425,,95..281,False
+7570,8EJ4,pdb,Cryo-EM structure of the active NLRP3 inflammasome disk,em,3.4,K;L;M;N;O;P;Q;R;S;T,q8tdx7;q8tdx7;q8tdx7;q8tdx7;q8tdx7;q8tdx7;q8tdx7;q8tdx7;q8tdx7;q8tdx7,302;302;302;302;302;302;302;302;302;302,;;;;;;;;;,18..290;18..290;18..290;18..290;18..290;18..290;18..290;18..290;18..290;18..290,False
+7577,8EQ9,pdb,Co-crystal structure of PERK with compound 11,x-ray,2.86,AAA,q9nzj5,1116,,587..1090,False
+7578,8EQD,pdb,Co-crystal structure of PERK with compound 24,x-ray,2.92,AAA,q9nzj5,1116,,587..1090,False
+7579,8EQE,pdb,Co-crystal structure of PERK with compound 26,x-ray,2.559,AAA,q9nzj5,1116,,587..1090,False
+7659,8GXQ,pdb,PIC-Mediator in complex with +1 nucleosome (T40N) in MH-binding state,em,5.04,HI,,,,,False
+7660,8GXS,pdb,PIC-Mediator in complex with +1 nucleosome (T40N) in H-binding state,em,4.16,HI,,,,,False
+7663,8H6E,pdb,Cryo-EM structure of human exon-defined spliceosome in the late pre-B state.,em,3.2,4Y,q13523,1007,,674..1005,False
+7664,8H6J,pdb,Cryo-EM structure of human exon-defined spliceosome in the mature pre-B state.,em,3.25,4Y,q13523,1007,,674..1005,False
+7711,8IYJ,pdb,Cryo-EM structure of the 48-nm repeat doublet microtubule from mouse sperm,em,3.5,X6;X7;X8,q925k9;q925k9;q925k9,273;273;273,;;,11..268;11..268;11..268,False
+7748,8OTZ,pdb,48-nm repeat of the native axonemal doublet microtubule from bovine sperm,em,3.6,1;2;x,;;,;;,;;,;;,False
+7837,8PYI,pdb,Human IGF1R with inhibitor 6,x-ray,3.06,AAA;BBB;CCC;DDD;EEE;FFF;GGG;HHH,p08069;p08069;p08069;p08069;p08069;p08069;p08069;p08069,1367;1367;1367;1367;1367;1367;1367;1367,;;;;;;;,970..1264;970..1264;970..1264;970..1264;970..1264;970..1264;970..1264;970..1264,False
+7838,8PYJ,pdb,Human IGF1R with inhibitor 8,x-ray,2.702,AAA,p08069,1367,,970..1264,False
+7839,8PYK,pdb,Human IGF1R with inhibitor 47,x-ray,2.23,AAA,p08069,1367,,970..1264,False
+7840,8PYL,pdb,Human IGF1R with inhibitor 53,x-ray,2.93,AAA,p08069,1367,,970..1264,False
+7841,8PYM,pdb,Human IGF1R with inhibitor 54,x-ray,2.652,AAA,p08069,1367,,970..1264,False
+7842,8PYN,pdb,Human IGF1R with inhibitor 56,x-ray,1.71,AAA,p08069,1367,,970..1264,False
+7869,8QXD,pdb,Cryo-EM structure of the cross-exon pre-B complex,em,9.6,K,q13523,1007,,674..1005,False
+7870,8R08,pdb,Cryo-EM structure of the cross-exon pre-B+AMPPNP complex,em,6.1,K,q13523,1007,,674..1005,False
+7871,8R0A,pdb,Cryo-EM structure of the cross-exon pre-B+5'ss complex,em,5.8,K,q13523,1007,,674..1005,False
+7907,8RPC,pdb,Crystal structure of PfCLK3 with TCMDC-135051,x-ray,2.079,A,w7jm86,401,,54..392,False
+7908,8RRQ,pdb,Crystal structure of human SYK in complex with compound 24,x-ray,1.6,A,p43405,635,,375..627,False
+7909,8RRZ,pdb,Crystal structure of SYK kinase in complex with compound 1,x-ray,1.75,A,p43405,635,,375..627,False
+7911,8RXR,pdb,Crystal structure of VPS34 in complex with inhibitor SB02024,x-ray,2.06,A;B,q8neb9;q8neb9,887;887,;,538..883;538..883,False
+7912,8S3R,pdb,HUMAN PI3KDELTA IN COMPLEX WITH PYRIDAZINONE INHIBITOR 7,x-ray,2.28,A,o00329,1044,,678..1033,False
+7913,8S3X,pdb,LIM Domain Kinase 2 (LIMK2) bound to compound 52,x-ray,2.59,A;B;C;D,p53671;p53671;p53671;p53671,638;638;638;638,;;;,304..597;304..597;304..597;304..597,False
+7915,8S85,pdb,Crystal structure of JAK1 JH1 domain in complex with an inhibitor,x-ray,1.75,A;B,p23458;p23458,1154;1154,;,"565..850,873..1146;565..850,873..1146",False
+8042,8VF6,pdb,Crystal structure of Serine/threonine-protein kinase 33 (STK33) Kinase Domain in complex with inhibitor CDD-2211,x-ray,2.7,A;B,q9byt3;q9byt3,514;514,;,104..412;104..412,False
+8050,8VOF,pdb,GI targeted CpPI4K inhibitor,x-ray,3.0,A,q9ubf8,816,,325..810,False
+8051,8VQ3,pdb,CDK2-CyclinE1 in complex with allosteric inhibitor I-198.,x-ray,1.84,A,p24941,298,,1..292,False
+8052,8VQ4,pdb,CDK2-CyclinE1 in complex with allosteric inhibitor I-125A.,x-ray,1.9,A,p24941,298,,1..292,False
+8054,8VXD,pdb,Structure of Casein kinase I isoform delta (CK1d) complexed with inhibitor 7,x-ray,2.47,A;B,p48730;p48730,415;415,;,5..290;5..290,False
+8055,8VXE,pdb,Structure of p38 alpha (Mitogen-activated protein kinase 14) complexed with inhibitor 6,x-ray,1.85,A,q16539,360,,9..349,False
+8056,8VXF,pdb,Structure of Casein kinase I isoform delta (CK1d) complexed with inhibitor 15,x-ray,2.28,A;B,p48730;p48730,415;415,;,5..290;5..290,False
+8057,8W1L,pdb,Structure of CSF1R kinase domain in complex with Cpd 32,x-ray,2.26,A,p07333,972,,551..909,False
+8058,8W3W,pdb,Crystal structure of IRAK4 in complex with compound 4,x-ray,1.976,A;B;C;D,q9nwz3;q9nwz3;q9nwz3;q9nwz3,460;460;460;460,;;;,156..454;156..454;156..454;156..454,False
+8059,8W3X,pdb,Crystal structure of IRAK4 in complex with compound 6,x-ray,1.765,A;B;C;D,q9nwz3;q9nwz3;q9nwz3;q9nwz3,460;460;460;460,;;;,156..454;156..454;156..454;156..454,False
+8094,8XFM,pdb,The Crystal Structure of MNK2 from Biortus.,x-ray,2.6,A,q9hbh9,465,,87..395,False
+8095,8XFY,pdb,The Crystal Structure of RSK2 from Biortus.,x-ray,3.2,A;B;C;D;E;F;G;H;I;J,p51812;p51812;p51812;p51812;p51812;p51812;p51812;p51812;p51812;p51812,740;740;740;740;740;740;740;740;740;740,;;;;;;;;;,"66..390,402..717;66..390,402..717;66..390,402..717;66..390,402..717;66..390,402..717;66..390,402..717;66..390,402..717;66..390,402..717;66..390,402..717;66..390,402..717",False
+8096,8XLO,pdb,FGFR1 kinase domain with a dual-warhead covalent inhibitor CXF-007,x-ray,2.36,A;B,p11362;p11362,822;822,;,468..754;468..754,False
+8097,8XLQ,pdb,FGFR4 kinase domain with a dual-warhead covalent inhibitor CXF-007,x-ray,1.95,A,p22455,802,,458..743,False
+8099,8XN7,pdb,"Crystal structure of HPK1 kinase domain T165E,S171E phosphomimetic mutant in complex with compound 9f",x-ray,2.65,A;B,q92918;q92918,833;833,;,14..444;14..444,False
+8106,8XVG,pdb,Structure of human NuA4/TIP60 complex,em,9.4,L,q9y4a5,3859,,3433..3826,False
+8112,8XZ7,pdb,FGFR1 kinase domain with a covalent inhibitor 10h,x-ray,1.75,A;B,p11362;p11362,822;822,;,468..754;468..754,False
+8113,8Y22,pdb,FGFR1 kinase domain with a covalent inhibitor 9g,x-ray,2.792,A;B,p11362;p11362,822;822,;,468..754;468..754,False
+8114,8Y6O,pdb,Cryo-EM Structure of the human minor pre-B complex (pre-precatalytic spliceosome) U11 and tri-snRNP part,em,3.38,Q,q13523,1007,,674..1005,False
+8118,8YHF,pdb,The Crystal Structure of the Type I TGF beta receptor from Biortus.,x-ray,1.4,A,p36897,503,,180..492,False
+8120,8YHL,pdb,The Crystal Structure of Tgf-Beta Type I Receptor (Alk5) from Biortus,x-ray,1.47,A,p36897,503,,180..492,False
+8122,8YKI,pdb,FGFR-1 in complex with ligand tasurgratinib,x-ray,2.79,A;B,p11362;p11362,822;822,;,468..754;468..754,False
+8127,8ZTX,pdb,Crystal Structure of Human Myt1 Kinase domain Bounded with compound 6b,x-ray,1.70033,A,q99640,499,,108..419,False
+8128,8ZU2,pdb,Crystal Structure of Human Myt1 Kinase domain Bounded with compound 8g,x-ray,1.79889,A,q99640,499,,108..419,False
+8129,8ZUD,pdb,Crystal Structure of Human Myt1 Kinase domain Bounded with compound 8f,x-ray,1.5051,A,q99640,499,,108..419,False
+8130,8ZUL,pdb,Crystal Structure of Human Myt1 Kinase domain Bounded with compound 8m,x-ray,1.80026,A,q99640,499,,108..419,False
+8133,9AXA,pdb,CryoEM structure of activated CRAF/MEK/14-3-3 complex with NST-628,em,4.36,A;C;B;D,p04049;p08515;q02750;q02750,648;218;393;393,;;;,344..611;;63..365;63..365,False
+8134,9AXC,pdb,Activated CRAF/MEK heterotetramer from focused refinement of CRAF/MEK/14-3-3 complex,em,4.16,A;C;B;D,p04049;p08515;q02750;q02750,648;218;393;393,;;;,344..611;;63..365;63..365,False
+8135,9AXH,pdb,Crystal structure of KSR1/MEK1 complex heterotetramer with NST-628,x-ray,2.81,A;B;C;D,q02750;q02750;q8ivt5;q8ivt5,393;393;923;923,;;;,63..365;63..365;597..879;597..879,False
+8136,9AXM,pdb,Crystal structure of ARAF/MEK1 complex with NST-628 and a RAF dimer,x-ray,2.42,A;B;C;D,q02750;p10398;q02750;p10398,393;606;393;606,;;;,63..365;301..586;63..365;301..586,False
+8137,9AXX,pdb,Crystal structure of BRAF/MEK1 complex with NST-628 and an active RAF dimer,x-ray,2.07,A;B;C;D,q02750;p15056;q02750;p15056,393;766;393;766,;;;,63..365;449..717;63..365;449..717,False
+8138,9AXY,pdb,Crystal structure of BRAF/MEK complex with NST-628 and inactive RAF,x-ray,3.6,A;B,p15056;q02750,766;393,;,449..717;63..365,False
+8139,9AY7,pdb,Crystal structure of CRAF/MEK1 complex with NST-628 and inactive RAF,x-ray,2.41,A;B,p04049;q02750,648;393,;,344..611;63..365,False
+8140,9AYA,pdb,Crystal structure of CRAF/MEK complex with NST-628 and active RAF dimer,x-ray,2.59,A;B;C;D,p04049;q02750;p04049;q02750,648;393;648;393,;;;,344..611;63..365;344..611;63..365,False
+8151,9BFB,pdb,Crystal structure of BRAF kinase domain with PF-07284890,x-ray,1.92,A,p15056,766,,449..717,False
+8152,9BHI,pdb,Crystal structure of the MerTK kinase domain with SA4488,x-ray,2.07,A,q12866,999,,578..872,False
+8153,9BHJ,pdb,"MerTK in complex with small molecule 6-{1-[([1,1'-biphenyl]-4-yl)carbamoyl]azetidin-3-yl}-3-[(1-methyl-1H-pyrazol-4-yl)amino]pyrazine-2-carboxamide",x-ray,2.294,A,q12866,999,,578..872,False
+8154,9BHK,pdb,"MerTK in complex with small molecule inhibitor 6-{1-[6-(3-hydroxy-3-methylbutoxy)-1,3-benzoxazol-2-yl]azetidin-3-yl}-3-[(1-methyl-1H-pyrazol-4-yl)amino]pyrazine-2-carboxamide",x-ray,2.106,A,q12866,999,,578..872,False
+8155,9BI8,pdb,Crystal structure of inhibitor GNE-6893 bound to HPK1,x-ray,2.25,A;B,q92918;q92918,833;833,;,14..444;14..444,False
+8156,9BIK,pdb,Crystal structure of inhibitor 1 bound to HPK1,x-ray,2.25,A;B,q92918;q92918,833;833,;,14..444;14..444,False
+8157,9BJ1,pdb,Crystal structure of inhibitor GNE-6893 bound to HPK1,x-ray,2.18,A;B,q92918;q92918,833;833,;,14..444;14..444,False
+8160,9C1R,pdb,Crystal structure of mutant cMET D1228N kinase domain in complex with inhibitor compound 13,x-ray,1.59,A,p08581,1390,,1079..1341,False
+8163,9C82,pdb,Structure of human ULK1C:PI3KC3-C1 supercomplex,em,6.84,A;B,q99570;q8neb9,1358;887,;,22..311;538..883,False
+8164,9CD5,pdb,FGFR1 Kinase Domain Soak with Inhibitor TYRA-300,x-ray,2.939,A;B,p11362;p11362,822;822,;,468..754;468..754,False
+8165,9CD7,pdb,FGFR3 Kinase Domain with Inhibitor TYRA-300,x-ray,2.53,A;B;C,p22607;p22607;p22607,806;806;806,;;,463..748;463..748;463..748,False
+8166,9CE4,pdb,Structure of CHK1 10-pt. mutant complex with LRRK2 indazole inhibitor compound 6,x-ray,1.31,A,o14757,476,,6..317,False
+8169,9CJ3,pdb,Dual phosphorylated human p38 alpha bound to pexmetinib,x-ray,1.95,A,q16539,360,,9..349,False
+8171,9CJ5,pdb,Unphosphorylated human p38 alpha bound to pexmetinib,x-ray,3.3,A,q16539,360,,9..349,False
+8172,9CMZ,pdb,Crystal Structure of Cdk-related protein kinase 6 (PK6) from Plasmodium falciparum in complex with inhibitor KG2-051,x-ray,2.45,A;B;C,q8idw1;q8idw1;q8idw1,305;305;305,;;,5..296;5..296;5..296,False
+8173,9D8E,pdb,Crystal structure of the ACVR1 (ALK2) Kinase Domain in complex with inhibitor CDD-2789,x-ray,1.72,A;B,q04771;q04771,509;509,;,186..496;186..496,False
+8174,9D8F,pdb,Crystal structure of the ACVR1 (ALK2) Kinase Domain in complex with inhibitor CDD-2281,x-ray,1.86,A;B,q04771;q04771,509;509,;,186..496;186..496,False
+8176,9D8Z,pdb,Crystal structure of the ACVR1 (ALK2) Kinase Domain in complex with inhibitor CDD-2282,x-ray,1.85,A;B,q04771;q04771,509;509,;,186..496;186..496,False
+8180,9DUB,pdb,Crystal Structure of Human DAPK1 Catalytic Subunit Complexed with Compound SRM-25-071,x-ray,1.5,A,p53355,1430,,6..291,False
+8181,9DUE,pdb,Crystal Structure of Human DAPK1 Catalytic Subunit Complexed with Compound SRM-07-081a,x-ray,1.65,A,p53355,1430,,6..291,False
+8188,9EP8,pdb,Crystal structure of ROCK2 in complex with a 8-(azaindolyl)-benzoazepinone inhibitor,x-ray,2.63,A;B;C;D,o75116;o75116;o75116;o75116,1388;1388;1388;1388,;;;,89..412;89..412;89..412;89..412,False
+8189,9EPV,pdb,Crystal structure of human Casein Kinase II subunit alpha (CK2a1) in complex with allosteric ligand FGC333,x-ray,2.3,A;B,p68400;p68400,391;391,;,5..328;5..328,False
+8190,9EPW,pdb,Crystal structure of human Casein Kinase II subunit alpha (CK2a1) in complex with allosteric ligand FGC3336,x-ray,2.3,B,p68400,391,,5..328,False
+8191,9EPX,pdb,Crystal structure of human Casein Kinase II subunit alpha (CK2a1) in complex with allosteric ligand FGC3331,x-ray,2.6,A;B,p68400;p68400,391;391,;,5..328;5..328,False
+8192,9EPY,pdb,Crystal structure of human Casein Kinase II subunit alpha (CK2a1) in complex with allosteric ligand FGC3330,x-ray,2.65,A;B,p68400;p68400,391;391,;,5..328;5..328,False
+8193,9EPZ,pdb,Crystal structure of human Casein Kinase II subunit alpha (CK2a1) in complex with allosteric ligand FGC3337,x-ray,2.65,A;B,p68400;p68400,391;391,;,5..328;5..328,False
+8194,9EQ0,pdb,Crystal structure of human Casein Kinase II subunit alpha (CK2a1) in complex with allosteric ligand FGJG12,x-ray,3.15,A;B,p68400;p68400,391;391,;,5..328;5..328,False
+8195,9EQ1,pdb,Crystal structure of human Casein Kinase II subunit alpha (CK2a1) in complex with allosteric ligand FGJM24,x-ray,3.0,A;B,p68400;p68400,391;391,;,5..328;5..328,False
+8196,9ESA,pdb,Aurora-C with SER mutation in complex with INCENP peptide,x-ray,2.8,AAA;BBB,q9uqb9;q9uqb9,309;309,;,28..302;28..302,False
+8198,9EWS,pdb,"Optimisation of Potent, Efficacious, Selective and Blood-Brain Barrier Penetrating Inhibitors Targeting EGFR Exon20 Insertion Mutations",x-ray,2.435,A,p00533,1210,,708..1003,False
+8199,9EWT,pdb,"Optimisation of Potent, Efficacious, Selective and Blood-Brain Barrier Penetrating Inhibitors Targeting EGFR Exon20 Insertion Mutations",x-ray,3.019,A;B,p00533;p00533,1210;1210,;,708..1003;708..1003,False
+8200,9EZ3,pdb,Crystal structure of human CLK3 bound to RN129,x-ray,2.7,A,p49761,490,,145..479,False
+8201,9EZG,pdb,"Crystal structure of human Casein Kinase II subunit alpha (CK2a1) in complex with 5-((4-((2-aminoethyl)(ethyl)amino)-3-(4H-1,2,4-triazol-4-yl)phenyl)amino)-7-(cyclopropylamino)pyrazolo[1,5-a]pyrimidine-3-carbonitrile",x-ray,2.18,A;B,p68400;p68400,391;391,;,5..328;5..328,False
+8202,9F3V,pdb,"RIP2K kinase domain dimer with bound compound 37 (N399), a speific NOD1 pathway inhibitor",x-ray,1.943,A;B,o43353;o43353,540;540,;,11..297;11..297,False
+8206,9FLB,pdb,Crystal structure of haspin (GSG2) in complex with MU1464,x-ray,2.5,A,q8tf76,798,,474..698,False
+8207,9FLC,pdb,Crystal structure of haspin (GSG2) in complex with MU1668,x-ray,2.18,A,q8tf76,798,,474..698,False
+8208,9FLO,pdb,Crystal structure of human Haspin (GSG2) kinase bound to MU2181,x-ray,2.9,A,q8tf76,798,,474..698,False
+8209,9FLQ,pdb,Crystal structure of human Haspin (GSG2) kinase bound to MU1959,x-ray,1.85,A,q8tf76,798,,474..698,False
+8210,9FLR,pdb,Crystal structure of human Haspin (GSG2) kinase bound to MU1963,x-ray,1.91,A,q8tf76,798,,474..698,False
+8211,9FLT,pdb,Crystal structure of human Haspin (GSG2) kinase bound to chemical probe MU1920,x-ray,2.4,A,q8tf76,798,,474..698,False
+8213,9FPD,pdb,Crystal structure of human TAK1/TAB1 fusion protein in complex with compound S1,x-ray,2.402,A,q15750,504,,,False
+8214,9FR2,pdb,CDK2 in complex with WEIZ-WX-04-001,x-ray,1.6,A,p24941,298,,1..292,False
+8215,9FYF,pdb,Crystal structure of human Casein Kinase II subunit alpha (CK2a1) in complex with TR06772818,x-ray,2.7,A;B,p68400;p68400,391;391,;,5..328;5..328,False
+8217,9GBE,pdb,Structure of Human Anaplastic Lymphoma Kinase (ALK) harboring the G1202R/L1196M Compound Mutation in Complex with NVL-655,x-ray,1.58,A,q9um73,1620,,1089..1381,False
+8219,9H46,pdb,EGFR wild type in complex with 25328,x-ray,3.163,A,p00533,1210,,708..1003,False
+8221,9INW,pdb,Crystal structure of DAPK1 in complex with compound 9,x-ray,1.52,A,p53355,1430,,6..291,False
+8222,9INX,pdb,Crystal structure of DAPK1 in complex with compound 10,x-ray,1.72,A,p53355,1430,,6..291,False
