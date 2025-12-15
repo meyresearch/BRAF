@@ -1,2 +1,2 @@
 # BRAF
-Dimensionality reduction of structural features of BRAF kinases
+ExploitING the wealth of experimental structural data on kinases to determine conformational changes associated with activation loop conformations. 
