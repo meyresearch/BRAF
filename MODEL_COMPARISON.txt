@@ -1,0 +1,455 @@
+================================================================================
+  COMPARISON: CNN2d_AE (WritheInvestigation03_26) vs wrCNN2D (wr2DCNNAE)
+================================================================================
+
+Both models share the same encoder architecture (Conv2d blocks with stride-2
+downsampling, global average pooling, linear to latent space). The differences
+are in what representation they operate on, how the decoder is built, and how
+the loss is computed.
+
+Source files:
+  CNN2d_AE :  molearn/src/molearn/models/CNN2d_AE.py
+              molearn/src/molearn/trainers/trainer.py
+  wrCNN2D  :  wr2DCNNAE/wrCNN2D.py
+              wr2DCNNAE/wrTrainer.py
+
+
+================================================================================
+1. INPUT REPRESENTATION
+================================================================================
+
+  CNN2d_AE:
+    - Input: Cartesian coordinates  [B, n_atoms, 3]
+    - coords_to_dm() converts to a DISTANCE MATRIX  [B, 1, n_atoms, n_atoms]
+      using torch operations:  sqrt( ||xi||^2 + ||xj||^2 - 2*xi.xj )
+    - The distance matrix is always non-negative and symmetric.
+    - Matrix dimension = n_atoms  (e.g. 27 for 27 CA atoms)
+
+    Code (CNN2d_AE.py, AutoEncoder.coords_to_dm):
+    ──────────────────────────────────────────────
+        @staticmethod
+        def coords_to_dm(coord):
+            # [B, n, 3]
+            n = coord.size(1)
+            G = torch.bmm(coord, coord.transpose(1, 2))
+            Gt =  torch.diagonal(G, dim1=-2, dim2=-1)[:, None, :]
+            Gt = Gt.repeat(1, n, 1)
+            dm = Gt + Gt.transpose(1, 2) - 2*G
+            dm_clamped = torch.clamp(dm, min=1e-12)
+            dm = torch.sqrt(dm_clamped)[:, None, :, :]
+            # Output: [B, 1, n, n]
+            return dm
+
+  wrCNN2D:
+    - Input: Cartesian coordinates  [B, n_atoms, 3]
+    - coords_to_writhe() converts to a WRITHE MATRIX  [B, 1, n_seg, n_seg]
+      using the Wiggle Cython extension (find_Sigma_array_batch_parallel).
+    - The writhe matrix measures pairwise topological entanglement between
+      backbone segments via the Gauss linking integral.
+    - Values can be positive or negative. The diagonal and first off-diagonal
+      are always zero (a segment cannot cross itself or its neighbour).
+    - Matrix dimension = n_seg = n_atoms - 1  (e.g. 26 for 27 CA atoms)
+    - The raw Cython output is lower-triangular * 2. It is then symmetrised:
+      sigma_sym = (sigma + sigma^T) / 2
+
+    Code (wrCNN2D.py, AutoEncoder.coords_to_writhe):
+    ─────────────────────────────────────────────────
+        @staticmethod
+        def coords_to_writhe(coord):
+            coord_np = coord.detach().cpu().numpy().astype(np.float32)
+            sigma = find_Sigma_array_batch_parallel(coord_np, num_threads=4)
+            sigma_sym = (sigma + np.transpose(sigma, (0, 2, 1))) / 2.0
+            writhe = torch.from_numpy(sigma_sym).unsqueeze(1).to(coord.device)
+            return writhe
+
+
+================================================================================
+2. CONSTRUCTOR ARGUMENT
+================================================================================
+
+  CNN2d_AE uses the distance matrix size directly. wrCNN2D takes n_atoms and
+  internally derives n_seg = n_atoms - 1.
+
+    Code (CNN2d_AE.py):
+    ───────────────────
+        class AutoEncoder(nn.Module):
+            def __init__(self, dm_dim, latent_dim=2, init_c=32, m=2, min_size=9):
+                super(AutoEncoder, self).__init__()
+                dims, channels = self._compute_dims_channels(dm_dim, init_c, m, min_size)
+                ...
+                self.encoder = Encoder(latent_dim, dims, channels)
+                self.decoder = Decoder(latent_dim, dims, channels)
+
+    Code (wrCNN2D.py):
+    ──────────────────
+        class AutoEncoder(nn.Module):
+            def __init__(self, n_atoms, latent_dim=2, init_c=32, m=2, min_size=9):
+                super().__init__()
+                self.n_atoms = int(n_atoms)
+                self.n_seg = self.n_atoms - 1
+                dims, channels = self._compute_dims_channels(self.n_seg, init_c, m, min_size)
+                ...
+                self.encoder = Encoder(latent_dim, dims, channels)
+                self.decoder = Decoder2D(latent_dim, dims, channels)
+
+  Note: CNN2d_AE feeds dm_dim (= n_atoms) to _compute_dims_channels.
+        wrCNN2D  feeds n_seg  (= n_atoms - 1) to _compute_dims_channels.
+        For n_atoms=27:  CNN2d_AE starts at 27, wrCNN2D starts at 26.
+
+
+================================================================================
+3. ENCODER
+================================================================================
+
+  IDENTICAL in both models (same class, same code).
+
+    Code (shared by both -- CNN2d_AE.py Encoder == wrCNN2D.py Encoder):
+    ────────────────────────────────────────────────────────────────────
+        class Encoder(nn.Module):
+            def __init__(self, latent_dim, dims, channels):
+                super().__init__()
+                assert len(dims) == len(channels), "dims/channels length mismatch"
+
+                self.convs = nn.ModuleList()
+                for in_ch, out_ch in zip(channels[:-1], channels[1:]):
+                    self.convs.append(nn.Sequential(
+                        nn.Conv2d(in_ch, out_ch,
+                                  kernel_size=4, stride=2, padding=1, bias=True),
+                        nn.BatchNorm2d(out_ch),
+                        nn.LeakyReLU(0.1, inplace=True),
+                    ))
+
+                self.global_pool = nn.AdaptiveAvgPool2d((1, 1))
+                final_ch = channels[-1]
+                self.finallayer = nn.Linear(final_ch, latent_dim)
+
+            def forward(self, x):
+                for conv in self.convs:
+                    x = conv(x)
+                x = self.global_pool(x)
+                x = x.view(x.size(0), -1)
+                z = self.finallayer(x)
+                return z
+
+  For n_atoms=27:
+    CNN2d_AE dims:  [27, 13, 6]    (input is 27x27 distance matrix)
+    wrCNN2D  dims:  [26, 13, 6]    (input is 26x26 writhe matrix)
+
+
+================================================================================
+4. DECODER  (biggest architectural difference)
+================================================================================
+
+  CNN2d_AE uses a 1D decoder that outputs [B, 3, n_atoms] Cartesian coords.
+  wrCNN2D  uses a 2D decoder that outputs [B, 1, n_seg, n_seg] writhe matrix.
+
+  ── CNN2d_AE  (Decoder - 1D) ── CNN2d_AE.py ──
+
+        class Decoder(nn.Module):
+            def __init__(self, latent_dim, dims, channels):
+                super().__init__()
+                assert len(dims) == len(channels), "dims/channels length mismatch"
+
+                self.from_latent = nn.Linear(latent_dim, channels[-1]*dims[-1])
+                #                                        ^^^^^^^^^^^^^^^^^^^^
+                #                  1D reshape: [B, channels[-1] * dims[-1]]
+                self.dims = dims
+                self.channels = channels
+
+                dims_rev = dims[::-1]
+                ch_rev   = channels[::-1]
+
+                layers = []
+                for i in range(len(dims_rev) - 1):
+                    h_in, h_out = dims_rev[i], dims_rev[i+1]
+                    in_ch       = ch_rev[i]
+                    default_out = ch_rev[i+1]
+                    is_last     = (i == len(dims_rev)-2)
+
+                    out_ch = 3 if is_last else default_out
+                    #        ^
+                    #  Final layer: 3 output channels (x, y, z)
+                    op_h = h_out - 2 * h_in
+
+                    layers.append(nn.ConvTranspose1d(in_ch, out_ch, 4, 2, 1, op_h, bias=True))
+                    #                  ^^^^^^^^^^^^^^
+                    #                  1D transposed convolution
+                    if not is_last:
+                        layers.append(nn.BatchNorm1d(out_ch))
+                        layers.append(nn.LeakyReLU(0.1, inplace=True))
+
+                self.convs = nn.Sequential(*layers)
+
+            def forward(self, z):
+                z = z.view(z.size(0), -1)
+                h = self.from_latent(z)
+                h = h.view(h.size(0), -1, self.dims[-1])
+                #                         ^^^^^^^^^^^^^
+                #              Reshape to [B, C, dims[-1]]  (1D spatial)
+                out = self.convs(h)
+                # Output: [B, 3, n_atoms]
+                return out
+
+
+  ── wrCNN2D  (Decoder2D - 2D) ── wrCNN2D.py ──
+
+        class Decoder2D(nn.Module):
+            def __init__(self, latent_dim, dims, channels):
+                super().__init__()
+                assert len(dims) == len(channels), "dims/channels length mismatch"
+
+                self.from_latent = nn.Linear(latent_dim, channels[-1] * dims[-1] * dims[-1])
+                #                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                #              2D reshape: [B, channels[-1] * dims[-1] * dims[-1]]
+                self.dims = dims
+
+                dims_rev = dims[::-1]
+                ch_rev = channels[::-1]
+
+                layers = []
+                for i in range(len(dims_rev) - 1):
+                    h_in, h_out = dims_rev[i], dims_rev[i + 1]
+                    in_ch = ch_rev[i]
+                    default_out = ch_rev[i + 1]
+                    is_last = i == len(dims_rev) - 2
+
+                    out_ch = 1 if is_last else default_out
+                    #        ^
+                    #  Final layer: 1 output channel (writhe value)
+                    op_h = h_out - 2 * h_in
+
+                    layers.append(
+                        nn.ConvTranspose2d(
+                    #       ^^^^^^^^^^^^^^
+                    #       2D transposed convolution
+                            in_ch, out_ch,
+                            kernel_size=4, stride=2, padding=1,
+                            output_padding=(op_h, op_h),
+                            bias=True,
+                        )
+                    )
+                    if not is_last:
+                        layers.append(nn.BatchNorm2d(out_ch))
+                        layers.append(nn.LeakyReLU(0.1, inplace=True))
+
+                self.convs = nn.Sequential(*layers)
+
+            def forward(self, z):
+                z = z.view(z.size(0), -1)
+                h = self.from_latent(z)
+                h = h.view(h.size(0), -1, self.dims[-1], self.dims[-1])
+                #                         ^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+                #            Reshape to [B, C, dims[-1], dims[-1]]  (2D spatial)
+                out = self.convs(h)
+                out = 0.5 * (out + out.transpose(-2, -1))
+                #     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                #     Enforce symmetry: (M + M^T) / 2
+                # Output: [B, 1, n_seg, n_seg]
+                return out
+
+  Key differences at a glance:
+    ┌─────────────────────┬──────────────────────────┬──────────────────────────┐
+    │                     │  CNN2d_AE Decoder         │  wrCNN2D Decoder2D       │
+    ├─────────────────────┼──────────────────────────┼──────────────────────────┤
+    │ from_latent size    │  channels[-1] * dims[-1] │  channels[-1]*dims[-1]^2 │
+    │ reshape             │  [B, C, D]   (1D)        │  [B, C, D, D]   (2D)    │
+    │ conv layers         │  ConvTranspose1d         │  ConvTranspose2d         │
+    │ normalization       │  BatchNorm1d             │  BatchNorm2d             │
+    │ final output_ch     │  3 (xyz coords)          │  1 (writhe value)        │
+    │ symmetry post-proc  │  None                    │  (out + out^T) / 2       │
+    │ output shape        │  [B, 3, n_atoms]         │  [B, 1, n_seg, n_seg]   │
+    └─────────────────────┴──────────────────────────┴──────────────────────────┘
+
+
+================================================================================
+5. WHAT encode() AND decode() RETURN
+================================================================================
+
+  ── CNN2d_AE.py ──
+
+        def encode(self, x):
+            dm = self.coords_to_dm(x)       # [B, n, 3] -> [B, 1, n, n]
+            z = self.encoder(dm)
+            return z
+
+        def decode(self, z):
+            coords = self.decoder(z)                           # [B, 3, n]
+            coords = coords.squeeze(-1).permute(0, 2, 1)      # [B, n, 3]
+            return coords
+
+  ── wrCNN2D.py ──
+
+        def encode(self, x):
+            writhe = self.coords_to_writhe(x)     # [B, n, 3] -> [B, 1, n_seg, n_seg]
+            z = self.encoder(writhe)
+            return z
+
+        def decode(self, z):
+            return self.decoder(z)                # [B, 1, n_seg, n_seg]
+
+  CNN2d_AE decode() permutes to [B, n_atoms, 3] to match the coordinate input.
+  wrCNN2D  decode() returns [B, 1, n_seg, n_seg] directly (no permute needed).
+
+
+================================================================================
+6. LOSS FUNCTION
+================================================================================
+
+  ── CNN2d_AE: standard Trainer (trainer.py) ──
+
+        def common_step(self, batch):
+            self._internal = {}
+            encoded = self.autoencoder.encode(batch)
+            self._internal["encoded"] = encoded
+            decoded = self.autoencoder.decode(encoded)[:, : batch.size(1), :]
+            self._internal["decoded"] = decoded
+            return dict(mse_loss=((batch - decoded) ** 2).mean())
+
+        def train_step(self, batch):
+            results = self.common_step(batch)
+            results["loss"] = results["mse_loss"]
+            return results
+
+    - batch is [B, n_atoms, 3] standardised coordinates.
+    - encode() internally calls coords_to_dm.
+    - decode() returns [B, n_atoms, 3] reconstructed coordinates.
+    - Loss is plain MSE between input and output coordinates.
+    - No masking.
+
+  ── wrCNN2D: WritheTrainer (wrTrainer.py) ──
+
+        def common_step(self, batch):
+            self._internal = {}
+            encoded = self.autoencoder.encoder(batch)
+            #                          ^^^^^^^
+            #        calls encoder() DIRECTLY, not encode()
+            #        (encode() would re-compute writhe from coords)
+            self._internal["encoded"] = encoded
+            decoded = self.autoencoder.decode(encoded)
+            self._internal["decoded"] = decoded
+
+            n = batch.shape[-1]
+            mask = (1.0 - torch.eye(n, device=batch.device)).unsqueeze(0).unsqueeze(0)
+            #       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            #       Binary mask: 0 on diagonal, 1 everywhere else
+            sq_diff = (decoded - batch) ** 2 * mask
+            n_active = mask.sum()
+            loss = sq_diff.sum() / (n_active * batch.shape[0])
+            return dict(writhe_loss=loss)
+
+        def train_step(self, batch):
+            results = self.common_step(batch)
+            results["loss"] = results["writhe_loss"]
+            return results
+
+    - batch is [B, 1, n_seg, n_seg] pre-computed writhe matrix.
+    - Calls self.autoencoder.encoder(batch) directly (NOT encode()).
+    - decode() returns [B, 1, n_seg, n_seg] reconstructed writhe matrix.
+    - Loss is MASKED MSE: the diagonal is excluded because it's structurally
+      zero (a segment cannot cross itself).
+    - Normalisation: sum of squared diffs / (number_of_off_diagonal_elements * B)
+
+
+================================================================================
+7. DATA PREPROCESSING IN THE TRAINER
+================================================================================
+
+  ── Standard Trainer (trainer.py, set_data) ──
+
+    - Receives PDBData, calls get_dataloader() to get coordinate DataLoaders.
+    - Each training batch is  [B, n_atoms, 3]  standardised coordinates.
+    - The model's encode() converts coords to distance matrix ON THE FLY
+      every mini-batch (fast because it's pure PyTorch on GPU).
+
+  ── WritheTrainer (wrTrainer.py, set_data) ──
+
+        def set_data(self, data, **kwargs):
+            super().set_data(data, **kwargs)          # standard PDBData setup
+
+            # 1. Unstandardise to real Angstrom coords
+            coords_std = self._data.dataset.detach().cpu()
+            coords_real = coords_std * float(self.std) + float(self.mean)
+            coords_np = coords_real.numpy().astype(np.float32, copy=False)
+
+            # 2. Compute writhe for ALL frames at once (expensive, done once)
+            sigma = find_Sigma_array_batch_parallel(coords_np, num_threads=4)
+            sigma_sym = (sigma + np.transpose(sigma, (0, 2, 1))) / 2.0
+            writhe_all = torch.from_numpy(sigma_sym).unsqueeze(1).float()
+
+            # 3. Split using the same train/valid indices from PDBData
+            train_idx = self._data.train_indices
+            valid_idx = self._data.valid_indices
+            writhe_train = writhe_all[train_idx]
+            writhe_valid = writhe_all[valid_idx]
+
+            self.writhe_train = writhe_train
+            self.writhe_valid = writhe_valid
+            self.n_seg = int(sigma_sym.shape[-1])
+
+            # 4. Preserve original coordinate DataLoaders (in case needed later)
+            self._coord_train_dataloader = self.train_dataloader
+            self._coord_valid_dataloader = self.valid_dataloader
+
+            # 5. REPLACE DataLoaders with writhe tensors
+            batch_size = kwargs.get("batch_size", 8)
+            self.train_dataloader = DataLoader(
+                TensorDataset(writhe_train),
+                batch_size=batch_size, shuffle=True, pin_memory=True,
+            )
+            self.valid_dataloader = DataLoader(
+                TensorDataset(writhe_valid),
+                batch_size=batch_size, shuffle=False, pin_memory=True,
+            )
+
+    - After set_data(), each training batch is [B, 1, n_seg, n_seg] writhe.
+    - During training, common_step calls self.autoencoder.encoder(batch)
+      DIRECTLY (bypassing encode(), which would re-compute writhe from coords).
+
+
+================================================================================
+8. WHY PRE-COMPUTE WRITHE?
+================================================================================
+
+  The writhe computation is expensive: it's a Cython/NumPy loop over all
+  O(n_seg^2) segment pairs for every frame. Pre-computing once avoids
+  repeating this every epoch.
+
+  The distance matrix in CNN2d_AE is computed on the fly because it's a
+  simple batched matrix multiply in PyTorch -- fast on GPU.
+
+
+================================================================================
+9. SYMMETRY ENFORCEMENT
+================================================================================
+
+  CNN2d_AE:
+    - Distance matrices are naturally symmetric from the formula.
+    - Decoder outputs [B, 3, n_atoms] coordinates, not a matrix -- no need.
+
+  wrCNN2D:
+    - Writhe matrices are symmetric by physical definition.
+    - ConvTranspose2d output is NOT guaranteed symmetric.
+    - Symmetry is explicitly enforced in Decoder2D.forward():
+
+        out = 0.5 * (out + out.transpose(-2, -1))
+
+
+================================================================================
+10. SUMMARY TABLE
+================================================================================
+
+  Aspect               | CNN2d_AE                  | wrCNN2D
+  ---------------------|---------------------------|---------------------------
+  Input representation | Distance matrix           | Writhe matrix
+  Matrix dimension     | n_atoms x n_atoms         | n_seg x n_seg (n_atoms-1)
+  Constructor arg      | dm_dim                    | n_atoms
+  Encoder              | Identical                 | Identical
+  Decoder type         | ConvTranspose1d (1D)      | ConvTranspose2d (2D)
+  Decoder output       | [B, 3, n_atoms] -> coords | [B, 1, n_seg, n_seg]
+  Output channels      | 3 (xyz)                   | 1 (writhe value)
+  Symmetry enforcement | Not needed                | (output + output^T) / 2
+  Loss function        | MSE on coordinates        | Masked MSE on writhe
+  Diagonal masking     | No                        | Yes (diagonal = 0)
+  Data in DataLoader   | Coordinates [B, n, 3]     | Writhe [B, 1, n_seg, n_seg]
+  Writhe precomputed?  | N/A                       | Yes, once before training
+  Trainer class        | Trainer                   | WritheTrainer (subclass)
