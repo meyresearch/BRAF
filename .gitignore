@@ -1,0 +1,22 @@
+PDBs/
+Results/
+__pycache__/
+.ipynb_checkpoints/
+old_workflow/
+*.pyc
+
+# Large local analysis artifacts (not source)
+*.csv
+*.pkl
+*.npy
+*.log
+
+# Root-level plot / label dumps (keep images/ in repo)
+/*_my_analysis*.txt
+/*_my_analysis*.png
+/pca_*.png
+/scores_*.png
+/cluster_*.png
+/pca_*.txt
+/pc1_*.txt
+/pc2_*.txt
