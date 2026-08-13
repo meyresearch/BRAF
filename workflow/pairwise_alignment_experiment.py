@@ -1,6 +1,6 @@
 """Pairwise FoldMason vs MUSTANG comparison (template + one PDB loop).
 
-Used by 08c-FeatureSelection.ipynb. Metrics match the multi-MSA experiment panels:
+Used by 08c-PairwiseAlignmentExperiment.ipynb. Metrics match the multi-MSA experiment panels:
 runtime, coverage (mean ± SEM across pairs), conservation overlap at ≥70%.
 """
 

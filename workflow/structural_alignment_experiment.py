@@ -1,7 +1,7 @@
 """FoldMason vs MUSTANG structural-alignment experiment (multi-seed).
 
 Ported from workflowMarch2026/Experiments/StructuralAlignment.ipynb for use in
-08b-FeatureSelection.ipynb. Runs repeated random subsamples and aggregates
+08b-MultiMSAAlignmentExperiment.ipynb. Runs repeated random subsamples and aggregates
 comparison metrics as mean ± SEM.
 """
 

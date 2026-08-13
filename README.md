@@ -27,26 +27,26 @@ Use this table to find the notebook that matches the stage of the workflow you w
 | Section | Notebook | Purpose | Status |
 | :--- | :--- | :--- | :--- |
 | **1. Data acquisition** | [`01-DataAcquisition.ipynb`](./01-DataAcquisition.ipynb) | BLASTP / PDB download from BRAF reference (`6UAN`) | 🟢 |
-| **2. Data curation** | [`02-DataCuration.ipynb`](./02-DataCuration.ipynb) | Extract protein chains and small molecules; KLIFS dirs | 🟢 |
-| **2. Data curation** | [`03-DataCuration.ipynb`](./03-DataCuration.ipynb) | Activation-loop filters (fixed bounds) | 🟢 |
-| **2. Data curation** | [`03b-DataCuration.ipynb`](./03b-DataCuration.ipynb) | Tukey loop-length filters and k-factor scan | 🟡 |
-| **2. Data curation** | [`03c-DataCuration.ipynb`](./03c-DataCuration.ipynb) | Activation-loop filter benchmark (motif / MUSCLE / KLIFS+HMMER) | 🟡 |
-| **3. Dimensionality reduction** | [`04a-DimensionalityReduction.ipynb`](./04a-DimensionalityReduction.ipynb) | Motif-based activation-loop alignment | 🟡 |
-| **3. Dimensionality reduction** | [`04b-DimensionalityReduction.ipynb`](./04b-DimensionalityReduction.ipynb) | Multi-N anchored alignment (FoldMason conservation) | 🟢 |
-| **3. Dimensionality reduction** | [`05a-DimensionalityReduction.ipynb`](./05a-DimensionalityReduction.ipynb) | Coarse-graining activation loops | 🟢 |
-| **3. Dimensionality reduction** | [`05b-DimensionalityReduction.ipynb`](./05b-DimensionalityReduction.ipynb) | Coarse-graining with MODELLER comparison | 🟡 |
-| **3. Dimensionality reduction** | [`05c-DimensionalityReduction.ipynb`](./05c-DimensionalityReduction.ipynb) | Coarse-graining variant | 🟡 |
-| **3. Dimensionality reduction** | [`06-DimensionalityReduction.ipynb`](./06-DimensionalityReduction.ipynb) | KinCore labels and ligand-type analysis | 🟢 |
-| **3. Dimensionality reduction** | [`07-DimensionalityReduction.ipynb`](./07-DimensionalityReduction.ipynb) | PCA clustering vs KinCore | 🟢 |
-| **4. Feature definition** | [`09-FeatureSelection.ipynb`](./09-FeatureSelection.ipynb) | Conserved-residue distance feature matrix (side-chain / Cα) | 🟢 |
-| **5. Feature selection** | [`08a-FeatureSelection.ipynb`](./08a-FeatureSelection.ipynb) | Structural conservation for feature selection | 🟢 |
-| **5. Feature selection** | [`08b-FeatureSelection.ipynb`](./08b-FeatureSelection.ipynb) | Multi-MSA alignment experiment (FoldMason vs MUSTANG) | 🟡 |
-| **5. Feature selection** | [`08c-FeatureSelection.ipynb`](./08c-FeatureSelection.ipynb) | Pairwise alignment experiment | 🟡 |
-| **5. Feature selection** | [`10-FeatureSelection.ipynb`](./10-FeatureSelection.ipynb) | Outlier, correlation, and ANOVA filtering | 🟢 |
-| **6. Feature classification** | [`11a-FeatureClassification.ipynb`](./11a-FeatureClassification.ipynb) | RF importances, SHAP, and W/KL analysis | 🟢 |
-| **6. Feature classification** | [`11b-FeatureClassification.ipynb`](./11b-FeatureClassification.ipynb) | Data-leakage investigation (Cα + hierarchical tree) | 🟡 |
-| **6. Feature classification** | [`11c-FeatureClassification.ipynb`](./11c-FeatureClassification.ipynb) | ANOVA vs mutual-information experiments | 🟡 |
-| **6. Feature classification** | [`11d-FeatureClassification.ipynb`](./11d-FeatureClassification.ipynb) | KinCore classifier experiments | 🟡 |
+| **2. Data curation** | [`02-ChainsAndLigands.ipynb`](./02-ChainsAndLigands.ipynb) | Extract protein chains and small molecules; KLIFS dirs | 🟢 |
+| **2. Data curation** | [`03-ActivationLoopFilters.ipynb`](./03-ActivationLoopFilters.ipynb) | Activation-loop filters (fixed bounds) | 🟢 |
+| **2. Data curation** | [`03b-TukeyLoopLengthFilters.ipynb`](./03b-TukeyLoopLengthFilters.ipynb) | Tukey loop-length filters and k-factor scan | 🟡 |
+| **2. Data curation** | [`03c-LoopFilterBenchmark.ipynb`](./03c-LoopFilterBenchmark.ipynb) | Activation-loop filter benchmark (motif / MUSCLE / KLIFS+HMMER) | 🟡 |
+| **3. Dimensionality reduction** | [`04a-MotifAlignment.ipynb`](./04a-MotifAlignment.ipynb) | Motif-based activation-loop alignment | 🟡 |
+| **3. Dimensionality reduction** | [`04b-MultiNAnchoredAlignment.ipynb`](./04b-MultiNAnchoredAlignment.ipynb) | Multi-N anchored alignment (FoldMason conservation) | 🟢 |
+| **3. Dimensionality reduction** | [`05a-CoarseGraining.ipynb`](./05a-CoarseGraining.ipynb) | Coarse-graining activation loops | 🟢 |
+| **3. Dimensionality reduction** | [`05b-CoarseGrainingModeller.ipynb`](./05b-CoarseGrainingModeller.ipynb) | Coarse-graining with MODELLER comparison | 🟡 |
+| **3. Dimensionality reduction** | [`05c-CoarseGrainingVariant.ipynb`](./05c-CoarseGrainingVariant.ipynb) | Coarse-graining variant | 🟡 |
+| **3. Dimensionality reduction** | [`06-KinCoreLabelsAndLigands.ipynb`](./06-KinCoreLabelsAndLigands.ipynb) | KinCore labels and ligand-type analysis | 🟢 |
+| **3. Dimensionality reduction** | [`07-PCAClusteringVsKinCore.ipynb`](./07-PCAClusteringVsKinCore.ipynb) | PCA clustering vs KinCore | 🟢 |
+| **4. Feature definition** | [`09-FeatureMatrix.ipynb`](./09-FeatureMatrix.ipynb) | Conserved-residue distance feature matrix (side-chain / Cα) | 🟢 |
+| **5. Feature selection** | [`08a-StructuralConservation.ipynb`](./08a-StructuralConservation.ipynb) | Structural conservation for feature selection | 🟢 |
+| **5. Feature selection** | [`08b-MultiMSAAlignmentExperiment.ipynb`](./08b-MultiMSAAlignmentExperiment.ipynb) | Multi-MSA alignment experiment (FoldMason vs MUSTANG) | 🟡 |
+| **5. Feature selection** | [`08c-PairwiseAlignmentExperiment.ipynb`](./08c-PairwiseAlignmentExperiment.ipynb) | Pairwise alignment experiment | 🟡 |
+| **5. Feature selection** | [`10-FeatureFiltering.ipynb`](./10-FeatureFiltering.ipynb) | Outlier, correlation, and ANOVA filtering | 🟢 |
+| **6. Feature classification** | [`11a-RFImportancesAndWKL.ipynb`](./11a-RFImportancesAndWKL.ipynb) | RF importances, SHAP, and W/KL analysis | 🟢 |
+| **6. Feature classification** | [`11b-DataLeakageInvestigation.ipynb`](./11b-DataLeakageInvestigation.ipynb) | Data-leakage investigation (Cα + hierarchical tree) | 🟡 |
+| **6. Feature classification** | [`11c-ANOVAvsMI.ipynb`](./11c-ANOVAvsMI.ipynb) | ANOVA vs mutual-information experiments | 🟡 |
+| **6. Feature classification** | [`11d-KinCoreClassifierExperiments.ipynb`](./11d-KinCoreClassifierExperiments.ipynb) | KinCore classifier experiments | 🟡 |
 | **6. Feature classification** | [`FeatureClassification.ipynb`](./FeatureClassification.ipynb) | Older classification notebook | 🔴 |
 
 ---
