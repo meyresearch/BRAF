@@ -113,7 +113,7 @@ Use this table to find the notebook that matches the stage of the workflow you w
 | `Results/`, `PDBs/` | Large local intermediates (**gitignored**; generated when notebooks are run) |
 | `*.csv`, `*.pkl` | Feature matrices and reference pickles (**gitignored**; produced by notebooks 09–10) |
 
-Each notebook starts with a **table of contents** mirroring its section headings and a **mermaid backend map** of the `workflow/` modules it uses.
+Each notebook starts with a **table of contents** mirroring its section headings and a **backend map** of the `workflow/` modules it uses (pre-rendered SVG under `images/backend_maps/`, because GitHub does not render Mermaid fences inside `.ipynb` files).
 
 ---
 
