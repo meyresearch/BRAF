@@ -10,48 +10,41 @@ The notebooks are organized by **pipeline progression** across global sections *
 
 ## Pipeline overview
 
-Main path (🟢 notebooks). Counts are indicative of a typical run and may change with filters.
+Counts below are from this `workflowAugust2026` run (notebook outputs and `Results/` artefacts). The graph follows **actual dataflow**, including Experiment notebook `04a` because it writes `misaligned_filter/` used by `05a` and `08a`. Feature filtering is correlation then MI top-N only.
 
 ```mermaid
 flowchart TB
-  ref["BRAF reference 6UAN"]
-  blast["1. BLASTP over PDB"]
-  dl["1. Download structures"]
-  chains["2. Extract chains<br/>DFG + APE required"]
+  N01["01-DataAcquisition<br/>InterPro IPR011009"] -->|"9007 hits"| N01b["01 download PDBs"]
+  N01b -->|"8727 structures"| N02["02-ChainsAndLigands<br/>extract chains"]
+  N02 -->|"12713 chains"| N03["03-ActivationLoopFilters<br/>motif DFG+APE"]
+  N03 -->|"6150"| N03g["03 gap filter max4"]
+  N03g -->|"3960"| N03b["03 length bounds 18-32"]
+  N03b -->|"3833"| N04a["04a-MotifAlignment<br/>align + misalign filter"]
+  N03b -->|"3833"| N04b["04b-MultiNAnchoredAlignment<br/>multi-N FoldMason"]
 
-  ref --> blast
-  blast -->|"~8223 hits"| dl
-  dl -->|"~8054 structures"| chains
-  chains -->|"~5961 chains"| align
-  chains --> cons
-
-  subgraph confPath ["Conformation path (section 3)"]
+  subgraph confPath ["Conformation path"]
     direction TB
-    align["Align / multi-N anchors"]
-    recon["Reconstruct short gaps<br/>≤4 residues"]
-    ca["CA loop extract + length filters"]
-    cg["Coarse-grain / spline sample"]
-    dr["PCA / clustering + KinCore labels"]
-    align -->|"~5935"| recon
-    recon -->|"~3258"| ca
-    ca -->|"~2523"| cg
-    cg --> dr
+    N04a -->|"3831"| N05a["05a-CoarseGraining"]
+    N05a -->|"3831"| N06["06-KinCoreLabelsAndLigands"]
+    N05a -->|"3831"| N07["07-PCAClusteringVsKinCore"]
+    N06 --> N07
   end
 
-  subgraph featPath ["Feature path (sections 4–5)"]
+  subgraph featPath ["Feature path"]
     direction TB
-    cons["Structural conservation ≥70%"]
-    feat["Distance features<br/>pLoop / αC"]
-    filt["Outlier → mean → corr → variance"]
-    anova["ANOVA reduction"]
-    cons --> feat
-    feat -->|"~6903 features"| filt
-    filt -->|"~1372"| anova
+    N04a -->|"3831"| N08a["08a-StructuralConservation<br/>70% conserved"]
+    N08a -->|"165 residues"| N09["09-FeatureMatrix"]
+    N04b --> N09
+    N07 -->|"3831 labels"| N09
+    N02 --> N09
+    N09 -->|"3831 x 10011"| N10["10-FeatureFiltering<br/>correlation"]
+    N10 -->|"8777 features"| N10mi["10 MI top-N"]
   end
 
-  dr -->|"~2523 labelled structures"| rf["6. Random Forest classification"]
-  anova -->|"~300 features"| rf
-  rf --> out["Structural changes linked to<br/>activation-loop conformations"]
+  N10mi -->|"300 features"| N11a["11a-RFImportancesAndWKL"]
+  N07 --> N11a
+  N06 --> N11a
+  N11a --> out["Structural changes linked to<br/>activation-loop conformations"]
 ```
 
 ---
