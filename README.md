@@ -1,8 +1,8 @@
-# BRAF Structural Workflow
+# KinLoopMap
 
-Exploiting the wealth of experimental structural data on kinases to determine conformational changes associated with activation loop conformations.
+Mapping kinase activation-loop conformational landscapes from experimental structures.
 
-This repository implements an end-to-end modelling pipeline: acquire and curate kinase structures related to BRAF, analyse activation-loop geometry with dimensionality reduction, define conserved-residue distance features, and train Random Forest classifiers that link structural features to conformational states.
+This repository implements an end-to-end modelling pipeline: acquire and curate kinase structures related to a BRAF reference, analyse activation-loop geometry with dimensionality reduction, define conserved-residue distance features, and train Random Forest classifiers that link structural features to conformational states.
 
 The notebooks are organized by **pipeline progression** across global sections **1–6**. If you are looking for a specific stage, use the **Directory Table** below.
 
