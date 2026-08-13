@@ -26,6 +26,7 @@ flowchart TB
     N05a["05a-CoarseGraining"]
     N06["06-KinCoreLabelsAndLigands"]
     N07["07-PCAClusteringVsKinCore"]
+    N07b["07b-AutoencoderBenchmark"]
   end
   subgraph s5 ["5. Feature selection"]
     N08a["08a-StructuralConservation"]
@@ -44,6 +45,7 @@ flowchart TB
   N04a -->|"3831"| N05a
   N05a -->|"3831"| N06
   N05a -->|"3831"| N07
+  N05a -->|"fitted CG"| N07b
   N06 --> N07
   N04a -->|"3831"| N08a
   N08a -->|"165 residues"| N09
@@ -58,6 +60,7 @@ flowchart TB
   classDef main fill:#d4edda,stroke:#28a745,color:#000
   classDef experiment fill:#fff3cd,stroke:#ffc107,color:#000
   class N01,N02,N03,N04a,N05a,N06,N07,N08a,N09,N10,N11a main
+  class N07b experiment
 ```
 
 ---
@@ -92,6 +95,7 @@ Use this table to find the notebook that matches the stage of the workflow you w
 | **3. Dimensionality reduction** | [`05c-CoarseGrainingVariant.ipynb`](./05c-CoarseGrainingVariant.ipynb) | Coarse-graining variant | Experiment / variant | 🟠 |
 | **3. Dimensionality reduction** | [`06-KinCoreLabelsAndLigands.ipynb`](./06-KinCoreLabelsAndLigands.ipynb) | KinCore labels and ligand-type analysis | Main pipeline | 🟢 |
 | **3. Dimensionality reduction** | [`07-PCAClusteringVsKinCore.ipynb`](./07-PCAClusteringVsKinCore.ipynb) | PCA clustering vs KinCore | Main pipeline | 🟢 |
+| **3. Dimensionality reduction** | [`07b-AutoencoderBenchmark.ipynb`](./07b-AutoencoderBenchmark.ipynb) | CNN2d / Small / wr2DCNN AE vs PCA on fitted CG loops | Experiment / variant | 🟠 |
 | **4. Feature definition** | [`09-FeatureMatrix.ipynb`](./09-FeatureMatrix.ipynb) | Conserved-residue distance feature matrix (side-chain / Cα) | Main pipeline | 🟢 |
 | **5. Feature selection** | [`08a-StructuralConservation.ipynb`](./08a-StructuralConservation.ipynb) | Structural conservation for feature selection | Main pipeline | 🟢 |
 | **5. Feature selection** | [`08b-MultiMSAAlignmentExperiment.ipynb`](./08b-MultiMSAAlignmentExperiment.ipynb) | Multi-MSA alignment experiment (FoldMason vs MUSTANG) | Experiment / variant | 🟠 |
@@ -132,7 +136,7 @@ Each notebook starts with a **table of contents** mirroring its section headings
 4. Notebooks import helpers from [`workflow/`](./workflow/). Keep the repository root as the working directory so those imports resolve.
 5. Heavy outputs stay on disk under `Results/` and as local feature exports; they are not tracked in git.
 
-Other **Experiment / variant** notebooks (`03b`, `03c`, `04b`, `05b`/`05c`, `08b`/`08c`, `11b`–`11d`) can be run once their upstream artefacts exist. Skip **Legacy** `FeatureClassification` unless you need the older path.
+Other **Experiment / variant** notebooks (`03b`, `03c`, `04b`, `05b`/`05c`, `07b`, `08b`/`08c`, `11b`–`11d`) can be run once their upstream artefacts exist. Skip **Legacy** `FeatureClassification` unless you need the older path.
 
 ---
 
