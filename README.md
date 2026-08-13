@@ -10,41 +10,58 @@ The notebooks are organized by **pipeline progression** across global sections *
 
 ## Pipeline overview
 
-Counts below are from this `workflowAugust2026` run (notebook outputs and `Results/` artefacts). The graph follows **actual dataflow**, including Experiment notebook `04a` because it writes `misaligned_filter/` used by `05a` and `08a`. Feature filtering is correlation then MI top-N only.
+Counts below are from this `workflowAugust2026` run (notebook outputs and `Results/` artefacts). Nodes use Directory Table notebook names and are colored by **Status** (green = Main, amber = Experiment). Subgraphs use Directory Table section titles. Experiment notebook `04a` is included because it writes `misaligned_filter/` used by `05a` and `08a`. Feature filtering on the edge into `11a` is correlation then MI top-N only.
 
 ```mermaid
 flowchart TB
-  N01["01-DataAcquisition<br/>InterPro IPR011009"] -->|"9007 hits"| N01b["01 download PDBs"]
-  N01b -->|"8727 structures"| N02["02-ChainsAndLigands<br/>extract chains"]
-  N02 -->|"12713 chains"| N03["03-ActivationLoopFilters<br/>motif DFG+APE"]
-  N03 -->|"6150"| N03g["03 gap filter max4"]
-  N03g -->|"3960"| N03b["03 length bounds 18-32"]
-  N03b -->|"3833"| N04a["04a-MotifAlignment<br/>align + misalign filter"]
-  N03b -->|"3833"| N04b["04b-MultiNAnchoredAlignment<br/>multi-N FoldMason"]
-
-  subgraph confPath ["Conformation path"]
-    direction TB
-    N04a -->|"3831"| N05a["05a-CoarseGraining"]
-    N05a -->|"3831"| N06["06-KinCoreLabelsAndLigands"]
-    N05a -->|"3831"| N07["07-PCAClusteringVsKinCore"]
-    N06 --> N07
+  subgraph s1 ["1. Data acquisition"]
+    N01["01-DataAcquisition"]
+  end
+  subgraph s2 ["2. Data curation"]
+    N02["02-ChainsAndLigands"]
+    N03["03-ActivationLoopFilters"]
+  end
+  subgraph s3 ["3. Dimensionality reduction"]
+    N04a["04a-MotifAlignment"]
+    N04b["04b-MultiNAnchoredAlignment"]
+    N05a["05a-CoarseGraining"]
+    N06["06-KinCoreLabelsAndLigands"]
+    N07["07-PCAClusteringVsKinCore"]
+  end
+  subgraph s5 ["5. Feature selection"]
+    N08a["08a-StructuralConservation"]
+    N10["10-FeatureFiltering"]
+  end
+  subgraph s4 ["4. Feature definition"]
+    N09["09-FeatureMatrix"]
+  end
+  subgraph s6 ["6. Feature classification"]
+    N11a["11a-RFImportancesAndWKL"]
   end
 
-  subgraph featPath ["Feature path"]
-    direction TB
-    N04a -->|"3831"| N08a["08a-StructuralConservation<br/>70% conserved"]
-    N08a -->|"165 residues"| N09["09-FeatureMatrix"]
-    N04b --> N09
-    N07 -->|"3831 labels"| N09
-    N02 --> N09
-    N09 -->|"3831 x 10011"| N10["10-FeatureFiltering<br/>correlation"]
-    N10 -->|"8777 features"| N10mi["10 MI top-N"]
-  end
-
-  N10mi -->|"300 features"| N11a["11a-RFImportancesAndWKL"]
+  N01 -->|"9007 hits → 8727 structures"| N02
+  N02 -->|"12713 chains"| N03
+  N03 -->|"6150 → 3960 → 3833"| N04a
+  N03 -->|"3833"| N04b
+  N04a -->|"3831"| N05a
+  N05a -->|"3831"| N06
+  N05a -->|"3831"| N07
+  N06 --> N07
+  N04a -->|"3831"| N08a
+  N08a -->|"165 residues"| N09
+  N04b --> N09
+  N07 -->|"3831 labels"| N09
+  N02 --> N09
+  N09 -->|"3831 x 10011"| N10
+  N10 -->|"8777 → 300 features"| N11a
   N07 --> N11a
   N06 --> N11a
-  N11a --> out["Structural changes linked to<br/>activation-loop conformations"]
+  N11a --> outNode["Structural changes linked to activation-loop conformations"]
+
+  classDef main fill:#d4edda,stroke:#28a745,color:#000
+  classDef experiment fill:#fff3cd,stroke:#ffc107,color:#000
+  class N01,N02,N03,N04b,N05a,N06,N07,N08a,N09,N10,N11a main
+  class N04a experiment
 ```
 
 ---
