@@ -10,7 +10,49 @@ The notebooks are organized by **pipeline progression** across global sections *
 
 ## Pipeline overview
 
-![Pipeline schematic](images/fullPipelineSchematic.png)
+Main path (🟢 notebooks). Counts are indicative of a typical run and may change with filters.
+
+```mermaid
+flowchart TB
+  ref["BRAF reference 6UAN"]
+  blast["1. BLASTP over PDB"]
+  dl["1. Download structures"]
+  chains["2. Extract chains<br/>DFG + APE required"]
+
+  ref --> blast
+  blast -->|"~8223 hits"| dl
+  dl -->|"~8054 structures"| chains
+  chains -->|"~5961 chains"| align
+  chains --> cons
+
+  subgraph confPath ["Conformation path (section 3)"]
+    direction TB
+    align["Align / multi-N anchors"]
+    recon["Reconstruct short gaps<br/>≤4 residues"]
+    ca["CA loop extract + length filters"]
+    cg["Coarse-grain / spline sample"]
+    dr["PCA / clustering + KinCore labels"]
+    align -->|"~5935"| recon
+    recon -->|"~3258"| ca
+    ca -->|"~2523"| cg
+    cg --> dr
+  end
+
+  subgraph featPath ["Feature path (sections 4–5)"]
+    direction TB
+    cons["Structural conservation ≥70%"]
+    feat["Distance features<br/>pLoop / αC"]
+    filt["Outlier → mean → corr → variance"]
+    anova["ANOVA reduction"]
+    cons --> feat
+    feat -->|"~6903 features"| filt
+    filt -->|"~1372"| anova
+  end
+
+  dr -->|"~2523 labelled structures"| rf["6. Random Forest classification"]
+  anova -->|"~300 features"| rf
+  rf --> out["Structural changes linked to<br/>activation-loop conformations"]
+```
 
 ---
 
