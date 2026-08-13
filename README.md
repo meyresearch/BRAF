@@ -10,7 +10,7 @@ The notebooks are organized by **pipeline progression** across global sections *
 
 ## Pipeline overview
 
-Counts below are from this `workflowAugust2026` run (notebook outputs and `Results/` artefacts). Nodes use Directory Table notebook names and are colored by **Status** (green = Main, amber = Experiment). Subgraphs use Directory Table section titles. Experiment notebook `04a` is included because it writes `misaligned_filter/` used by `05a` and `08a`. Feature filtering on the edge into `11a` is correlation then MI top-N only.
+Counts below are from this `workflowAugust2026` run (notebook outputs and `Results/` artefacts). Nodes use Directory Table notebook names and are colored by **Pipeline** role (green = Main, amber = Experiment). Subgraphs use Directory Table section titles. Feature filtering on the edge into `11a` is correlation then MI top-N only.
 
 ```mermaid
 flowchart TB
@@ -23,7 +23,6 @@ flowchart TB
   end
   subgraph s3 ["3. Dimensionality reduction"]
     N04a["04a-MotifAlignment"]
-    N04b["04b-MultiNAnchoredAlignment"]
     N05a["05a-CoarseGraining"]
     N06["06-KinCoreLabelsAndLigands"]
     N07["07-PCAClusteringVsKinCore"]
@@ -42,14 +41,12 @@ flowchart TB
   N01 -->|"9007 hits → 8727 structures"| N02
   N02 -->|"12713 chains"| N03
   N03 -->|"6150 → 3960 → 3833"| N04a
-  N03 -->|"3833"| N04b
   N04a -->|"3831"| N05a
   N05a -->|"3831"| N06
   N05a -->|"3831"| N07
   N06 --> N07
   N04a -->|"3831"| N08a
   N08a -->|"165 residues"| N09
-  N04b --> N09
   N07 -->|"3831 labels"| N09
   N02 --> N09
   N09 -->|"3831 x 10011"| N10
@@ -60,8 +57,7 @@ flowchart TB
 
   classDef main fill:#d4edda,stroke:#28a745,color:#000
   classDef experiment fill:#fff3cd,stroke:#ffc107,color:#000
-  class N01,N02,N03,N04b,N05a,N06,N07,N08a,N09,N10,N11a main
-  class N04a experiment
+  class N01,N02,N03,N04a,N05a,N06,N07,N08a,N09,N10,N11a main
 ```
 
 ---
@@ -89,8 +85,8 @@ Use this table to find the notebook that matches the stage of the workflow you w
 | **2. Data curation** | [`03-ActivationLoopFilters.ipynb`](./03-ActivationLoopFilters.ipynb) | Activation-loop filters (fixed bounds) | Main pipeline | 🟢 |
 | **2. Data curation** | [`03b-TukeyLoopLengthFilters.ipynb`](./03b-TukeyLoopLengthFilters.ipynb) | Tukey loop-length filters and k-factor scan | Experiment / variant | 🟠 |
 | **2. Data curation** | [`03c-LoopFilterBenchmark.ipynb`](./03c-LoopFilterBenchmark.ipynb) | Activation-loop filter benchmark (motif / MUSCLE / KLIFS+HMMER) | Experiment / variant | 🟠 |
-| **3. Dimensionality reduction** | [`04a-MotifAlignment.ipynb`](./04a-MotifAlignment.ipynb) | Motif-based activation-loop alignment | Experiment / variant | 🟠 |
-| **3. Dimensionality reduction** | [`04b-MultiNAnchoredAlignment.ipynb`](./04b-MultiNAnchoredAlignment.ipynb) | Multi-N anchored alignment (FoldMason conservation) | Main pipeline | 🔴 |
+| **3. Dimensionality reduction** | [`04a-MotifAlignment.ipynb`](./04a-MotifAlignment.ipynb) | Motif-based activation-loop alignment | Main pipeline | 🟠 |
+| **3. Dimensionality reduction** | [`04b-MultiNAnchoredAlignment.ipynb`](./04b-MultiNAnchoredAlignment.ipynb) | Multi-N anchored alignment (FoldMason conservation) | Experiment / variant | 🔴 |
 | **3. Dimensionality reduction** | [`05a-CoarseGraining.ipynb`](./05a-CoarseGraining.ipynb) | Coarse-graining activation loops | Main pipeline | 🟢 |
 | **3. Dimensionality reduction** | [`05b-CoarseGrainingModeller.ipynb`](./05b-CoarseGrainingModeller.ipynb) | Coarse-graining with MODELLER comparison | Experiment / variant | 🔴 |
 | **3. Dimensionality reduction** | [`05c-CoarseGrainingVariant.ipynb`](./05c-CoarseGrainingVariant.ipynb) | Coarse-graining variant | Experiment / variant | 🟠 |
@@ -127,14 +123,16 @@ Each notebook starts with a **table of contents** mirroring its section headings
 
 1. Clone the `devel` branch of this repository.
 2. Create / activate a conda (or similar) environment with the scientific Python stack used by the notebooks (see **Dependencies**).
-3. Run the 🟢 **Main pipeline** notebooks in order:
+3. Run the **Main pipeline** notebooks in the order of the **Pipeline overview** / Directory Table dataflow (not the Directory Table section numbers alone — section **4** `09` must run after section **5** conservation `08a`):
 
-   `01` → `02` → `03` → `04b` → `05a` → `06` → `07` → `08a` → `09` → `10` → `11a`
+   `01` → `02` → `03` → `04a` → `05a` → `06` → `07` → `08a` → `09` → `10` → `11a`
+
+   - Check the Directory Table **Status** column before relying on a step (`05b` is currently **To debug**).
 
 4. Notebooks import helpers from [`workflow/`](./workflow/). Keep the repository root as the working directory so those imports resolve.
 5. Heavy outputs stay on disk under `Results/` and as local feature exports; they are not tracked in git.
 
-🟡 Experiment notebooks (`03b`, `03c`, `04a`, `05b`/`05c`, `08b`/`08c`, `11b`–`11d`) can be run once their upstream artefacts exist.
+Other **Experiment / variant** notebooks (`03b`, `03c`, `04b`, `05b`/`05c`, `08b`/`08c`, `11b`–`11d`) can be run once their upstream artefacts exist. Skip **Legacy** `FeatureClassification` unless you need the older path.
 
 ---
 
