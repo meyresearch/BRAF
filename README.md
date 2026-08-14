@@ -4,7 +4,7 @@ Mapping kinase activation-loop conformational landscapes from experimental struc
 
 This repository implements an end-to-end modelling pipeline: acquire and curate kinase structures related to a BRAF reference, analyse activation-loop geometry with dimensionality reduction, define conserved-residue distance features, and train Random Forest classifiers that link structural features to conformational states.
 
-The notebooks are organized by **pipeline progression** across global sections **1–6**. If you are looking for a specific stage, use the **Directory Table** below.
+The notebooks are organized by **pipeline progression** across global sections **1–3** and **5–6**. If you are looking for a specific stage, use the **Directory Table** below.
 
 ---
 
@@ -29,11 +29,10 @@ flowchart TB
     N07b["07b-AutoencoderBenchmark"]
   end
   subgraph s5 ["5. Feature selection"]
+    direction TB
     N08a["08a-StructuralConservation"]
-    N10["10-FeatureFiltering"]
-  end
-  subgraph s4 ["4. Feature definition"]
     N09["09-FeatureMatrix"]
+    N10["10-FeatureFiltering"]
   end
   subgraph s6 ["6. Feature classification"]
     N11a["11a-RFImportancesAndWKL"]
@@ -96,11 +95,11 @@ Use this table to find the notebook that matches the stage of the workflow you w
 | **3. Dimensionality reduction** | [`06-KinCoreLabelsAndLigands.ipynb`](./06-KinCoreLabelsAndLigands.ipynb) | KinCore labels and ligand-type analysis | Main pipeline | 🟢 |
 | **3. Dimensionality reduction** | [`07-PCAClusteringVsKinCore.ipynb`](./07-PCAClusteringVsKinCore.ipynb) | PCA clustering vs KinCore | Main pipeline | 🟢 |
 | **3. Dimensionality reduction** | [`07b-AutoencoderBenchmark.ipynb`](./07b-AutoencoderBenchmark.ipynb) | CNN2d / Small / wr2DCNN AE vs PCA on fitted CG loops | Experiment / variant | 🟠 |
-| **4. Feature definition** | [`09-FeatureMatrix.ipynb`](./09-FeatureMatrix.ipynb) | Conserved-residue distance feature matrix (side-chain / Cα) | Main pipeline | 🟢 |
 | **5. Feature selection** | [`08a-StructuralConservation.ipynb`](./08a-StructuralConservation.ipynb) | Structural conservation for feature selection | Main pipeline | 🟢 |
+| **5. Feature selection** | [`09-FeatureMatrix.ipynb`](./09-FeatureMatrix.ipynb) | Conserved-residue distance feature matrix (side-chain / Cα) | Main pipeline | 🟢 |
+| **5. Feature selection** | [`10-FeatureFiltering.ipynb`](./10-FeatureFiltering.ipynb) | Outlier, correlation, and ANOVA filtering | Main pipeline | 🟢 |
 | **5. Feature selection** | [`08b-MultiMSAAlignmentExperiment.ipynb`](./08b-MultiMSAAlignmentExperiment.ipynb) | Multi-MSA alignment experiment (FoldMason vs MUSTANG) | Experiment / variant | 🟠 |
 | **5. Feature selection** | [`08c-PairwiseAlignmentExperiment.ipynb`](./08c-PairwiseAlignmentExperiment.ipynb) | Pairwise alignment experiment | Experiment / variant | 🟠 |
-| **5. Feature selection** | [`10-FeatureFiltering.ipynb`](./10-FeatureFiltering.ipynb) | Outlier, correlation, and ANOVA filtering | Main pipeline | 🟢 |
 | **6. Feature classification** | [`11a-RFImportancesAndWKL.ipynb`](./11a-RFImportancesAndWKL.ipynb) | RF importances, SHAP, and W/KL analysis | Main pipeline | 🟢 |
 | **6. Feature classification** | [`11b-DataLeakageInvestigation.ipynb`](./11b-DataLeakageInvestigation.ipynb) | Data-leakage investigation (Cα + hierarchical tree) | Experiment / variant | 🟠 |
 | **6. Feature classification** | [`11c-ANOVAvsMI.ipynb`](./11c-ANOVAvsMI.ipynb) | ANOVA vs mutual-information experiments | Experiment / variant | 🟠 |
@@ -127,7 +126,7 @@ Each notebook starts with a **table of contents** mirroring its section headings
 
 1. Clone the `devel` branch of this repository.
 2. Create / activate a conda (or similar) environment with the scientific Python stack used by the notebooks (see **Dependencies**).
-3. Run the **Main pipeline** notebooks in the order of the **Pipeline overview** / Directory Table dataflow (not the Directory Table section numbers alone — section **4** `09` must run after section **5** conservation `08a`):
+3. Run the **Main pipeline** notebooks in the order of the **Pipeline overview** / Directory Table dataflow (`09` after conservation `08a`, then `10`):
 
    `01` → `02` → `03` → `04a` → `05a` → `06` → `07` → `08a` → `09` → `10` → `11a`
 
