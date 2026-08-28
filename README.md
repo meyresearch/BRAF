@@ -27,6 +27,7 @@ flowchart TB
     N06["06-KinCoreLabelsAndLigands"]
     N07["07-PCAClusteringVsKinCore"]
     N07b["07b-AutoencoderBenchmark"]
+    N04c["04c-CNN2dLatentLandscape"]
   end
   subgraph s5 ["5. Feature selection"]
     direction TB
@@ -45,6 +46,7 @@ flowchart TB
   N05a -->|"3831"| N06
   N05a -->|"3831"| N07
   N05a -->|"fitted CG"| N07b
+  N05a -->|"fitted CG"| N04c
   N06 --> N07
   N04a -->|"3831"| N08a
   N08a -->|"165 residues"| N09
@@ -59,7 +61,7 @@ flowchart TB
   classDef main fill:#d4edda,stroke:#28a745,color:#000
   classDef experiment fill:#fff3cd,stroke:#ffc107,color:#000
   class N01,N02,N03,N04a,N05a,N06,N07,N08a,N09,N10,N11a main
-  class N07b experiment
+  class N07b,N04c experiment
 ```
 
 ---
@@ -89,6 +91,7 @@ Use this table to find the notebook that matches the stage of the workflow you w
 | **2. Data curation** | [`03c-LoopFilterBenchmark.ipynb`](./03c-LoopFilterBenchmark.ipynb) | Activation-loop filter benchmark (motif / MUSCLE / KLIFS+HMMER) | Experiment / variant | 🟠 |
 | **3. Dimensionality reduction** | [`04a-MotifAlignment.ipynb`](./04a-MotifAlignment.ipynb) | Motif-based activation-loop alignment | Main pipeline | 🟠 |
 | **3. Dimensionality reduction** | [`04b-MultiNAnchoredAlignment.ipynb`](./04b-MultiNAnchoredAlignment.ipynb) | Multi-N anchored alignment (FoldMason conservation) | Experiment / variant | 🔴 |
+| **3. Dimensionality reduction** | [`04c-CNN2dLatentLandscape.ipynb`](./04c-CNN2dLatentLandscape.ipynb) | CNN2d AE with a 6D latent space; 15 pairwise latent RMSD landscapes | Experiment / variant | 🟠 |
 | **3. Dimensionality reduction** | [`05a-CoarseGraining.ipynb`](./05a-CoarseGraining.ipynb) | Coarse-graining activation loops | Main pipeline | 🟢 |
 | **3. Dimensionality reduction** | [`05b-CoarseGrainingModeller.ipynb`](./05b-CoarseGrainingModeller.ipynb) | Coarse-graining with MODELLER comparison | Experiment / variant | 🔴 |
 | **3. Dimensionality reduction** | [`05c-CoarseGrainingVariant.ipynb`](./05c-CoarseGrainingVariant.ipynb) | Coarse-graining variant | Experiment / variant | 🟠 |
@@ -135,7 +138,7 @@ Each notebook starts with a **table of contents** mirroring its section headings
 4. Notebooks import helpers from [`workflow/`](./workflow/). Keep the repository root as the working directory so those imports resolve.
 5. Heavy outputs stay on disk under `Results/` and as local feature exports; they are not tracked in git.
 
-Other **Experiment / variant** notebooks (`03b`, `03c`, `04b`, `05b`/`05c`, `07b`, `08b`/`08c`, `11b`–`11d`) can be run once their upstream artefacts exist. Skip **Legacy** `FeatureClassification` unless you need the older path.
+Other **Experiment / variant** notebooks (`03b`, `03c`, `04b`, `04c`, `05b`/`05c`, `07b`, `08b`/`08c`, `11b`–`11d`) can be run once their upstream artefacts exist. Skip **Legacy** `FeatureClassification` unless you need the older path.
 
 ---
 

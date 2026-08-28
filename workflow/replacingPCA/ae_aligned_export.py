@@ -139,10 +139,54 @@ def consecutive_ca_angles(coords):
     return np.arccos(np.clip(dot_product, -1.0, 1.0)).astype(np.float32)
 
 
+def consecutive_ca_pseudo_dihedrals(coords, degenerate_bond_angstrom=0.1):
+    """Cα_i–Cα_{i+1}–Cα_{i+2}–Cα_{i+3} pseudo-dihedrals (rad).
+
+    ``coords``: ``[n_frames, n_atoms, 3]``. Returns ``[n_frames, n_atoms-3]``
+    in ``(-π, π]``. Entries whose quadruplet has a near-zero bond are NaN.
+    """
+    coords = np.asarray(coords, dtype=np.float64)
+    p0 = coords[:, :-3, :]
+    p1 = coords[:, 1:-2, :]
+    p2 = coords[:, 2:-1, :]
+    p3 = coords[:, 3:, :]
+    b0 = p1 - p0
+    b1 = p2 - p1
+    b2 = p3 - p2
+    n0 = np.linalg.norm(b0, axis=-1)
+    n1 = np.linalg.norm(b1, axis=-1)
+    n2 = np.linalg.norm(b2, axis=-1)
+    degenerate = (
+        (n0 < degenerate_bond_angstrom)
+        | (n1 < degenerate_bond_angstrom)
+        | (n2 < degenerate_bond_angstrom)
+    )
+    n1_plane = np.cross(b0, b1)
+    n2_plane = np.cross(b1, b2)
+    b1_unit = b1 / np.clip(n1[..., None], 1e-12, None)
+    m1 = np.cross(n1_plane, b1_unit)
+    x = np.einsum("...i,...i->...", n1_plane, n2_plane)
+    y = np.einsum("...i,...i->...", m1, n2_plane)
+    dih = np.arctan2(y, x)
+    dih[degenerate] = np.nan
+    return dih.astype(np.float32)
+
+
+def _circular_mean(angles, axis=0):
+    """Circular mean via ``atan2(mean(sin), mean(cos))``, ignoring NaNs."""
+    angles = np.asarray(angles, dtype=np.float64)
+    return np.arctan2(
+        np.nanmean(np.sin(angles), axis=axis),
+        np.nanmean(np.cos(angles), axis=axis),
+    )
+
+
 def _pearson_r(x, y):
     x = np.asarray(x, dtype=np.float64)
     y = np.asarray(y, dtype=np.float64)
-    if len(x) < 2:
+    mask = np.isfinite(x) & np.isfinite(y)
+    x, y = x[mask], y[mask]
+    if len(x) < 2 or np.std(x) == 0 or np.std(y) == 0:
         return float("nan")
     return float(np.corrcoef(x, y)[0, 1])
 
@@ -807,6 +851,122 @@ def plot_ca_angle_comparison(
         "csv_valid": csv_paths["valid"],
         "angle_train": angle_results["train"],
         "angle_valid": angle_results["valid"],
+    }
+
+
+def plot_ca_pseudodihedral_comparison(
+    wf: "AutoencoderWorkflow",
+    *,
+    train_in: Optional[np.ndarray] = None,
+    valid_in: Optional[np.ndarray] = None,
+    train_out: Optional[np.ndarray] = None,
+    valid_out: Optional[np.ndarray] = None,
+    aligned_export: Optional[Mapping[str, np.ndarray]] = None,
+    npz_path: Optional[str] = None,
+    figure_filename: str = "ca_pseudodihedral_input_vs_decoded.png",
+    dpi: int = 200,
+    show: bool = True,
+    subfolder: Optional[str] = None,
+):
+    """Cα placeholder pseudo-dihedrals: distributions and per-index circular means."""
+    subfolder = _wf_subfolder(wf, subfolder)
+    train_in, valid_in, train_out, valid_out = _get_coords_for_plots(
+        wf,
+        aligned_export,
+        npz_path,
+        train_in=train_in,
+        valid_in=valid_in,
+        train_out=train_out,
+        valid_out=valid_out,
+        subfolder=subfolder,
+    )
+    splits = (("train", train_in, train_out), ("valid", valid_in, valid_out))
+    dih_results = {}
+    csv_paths = {}
+
+    for name, cin, cout in splits:
+        dih_in = consecutive_ca_pseudo_dihedrals(cin)
+        dih_out = consecutive_ca_pseudo_dihedrals(cout)
+        mean_in = _circular_mean(dih_in, axis=0)
+        mean_out = _circular_mean(dih_out, axis=0)
+        dih_results[name] = (dih_in, dih_out, mean_in, mean_out)
+        csv_path = os.path.join(
+            wf.output_base_dir, f"ca_pseudodihedral_per_index_{name}.csv"
+        )
+        pd.DataFrame(
+            {
+                "dihedral_idx": np.arange(1, len(mean_in) + 1),
+                "mean_input_rad": mean_in,
+                "mean_decoded_rad": mean_out,
+            }
+        ).to_csv(csv_path, index=False)
+        csv_paths[name] = csv_path
+        print(f"Saved {csv_path}")
+
+    fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+    bins = np.linspace(-np.pi, np.pi, 41)
+    for col, (name, _, _) in enumerate(splits):
+        dih_in, dih_out, mean_in, mean_out = dih_results[name]
+        ax_hist = axes[0, col]
+        ax_hist.hist(
+            dih_in[np.isfinite(dih_in)].ravel(),
+            bins=bins,
+            color="tab:blue",
+            alpha=0.55,
+            edgecolor="black",
+            label="input",
+        )
+        ax_hist.hist(
+            dih_out[np.isfinite(dih_out)].ravel(),
+            bins=bins,
+            color="tab:orange",
+            alpha=0.55,
+            edgecolor="black",
+            label="decoded",
+        )
+        ax_hist.set_xlabel("Cα pseudo-dihedral [rad]")
+        ax_hist.set_ylabel("# values")
+        ax_hist.set_title(f"{name.capitalize()} — dihedral distribution")
+        ax_hist.legend(fontsize=9)
+        ax_hist.grid(True, alpha=0.3)
+
+        ax_curve = axes[1, col]
+        x_idx = np.arange(1, len(mean_in) + 1)
+        r_dih = _pearson_r(mean_in, mean_out)
+        ax_curve.plot(x_idx, mean_in, color="tab:blue", lw=1.5, label="input")
+        ax_curve.plot(
+            x_idx,
+            mean_out,
+            color="tab:orange",
+            lw=1.5,
+            ls="--",
+            label="decoded",
+        )
+        ax_curve.set_xlabel(r"Dihedral index (C$\alpha$ $i$–$i$+1–$i$+2–$i$+3)")
+        ax_curve.set_ylabel("Circular mean [rad]")
+        ax_curve.set_title(
+            f"{name.capitalize()} — per-index circular mean ($r$ = {r_dih:.3f})"
+        )
+        ax_curve.legend(fontsize=9)
+        ax_curve.grid(True, alpha=0.3)
+        print(f"{name} Cα pseudo-dihedral Pearson r = {r_dih:.4f}")
+
+    fig.suptitle("Cα placeholder pseudo-dihedrals: input vs Kabsch-aligned decoded")
+    fig.tight_layout()
+    dih_png = os.path.join(wf.output_base_dir, figure_filename)
+    fig.savefig(dih_png, dpi=dpi, bbox_inches="tight")
+    if show:
+        plt.show()
+    else:
+        plt.close(fig)
+    print(f"Saved {dih_png}")
+
+    return {
+        "figure": dih_png,
+        "csv_train": csv_paths["train"],
+        "csv_valid": csv_paths["valid"],
+        "dihedral_train": dih_results["train"],
+        "dihedral_valid": dih_results["valid"],
     }
 
 

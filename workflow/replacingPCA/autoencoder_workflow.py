@@ -12,8 +12,10 @@ import glob
 import os
 import subprocess
 
+import matplotlib.pyplot as plt
 import MDAnalysis as mda
 import numpy as np
+import pandas as pd
 import torch
 from molearn.analysis.analyser import MolearnAnalysis
 from molearn.data import PDBData
@@ -178,6 +180,58 @@ class AutoencoderWorkflow:
 
         self._print_status("plot_ca_angle")
         return _plot(self, aligned_export=aligned_export, show=show, **kwargs)
+
+    def plot_ca_pseudodihedral_comparison(
+        self, aligned_export=None, show=True, **kwargs
+    ):
+        from .ae_aligned_export import plot_ca_pseudodihedral_comparison as _plot
+
+        self._print_status("plot_ca_pseudodihedral")
+        return _plot(self, aligned_export=aligned_export, show=show, **kwargs)
+
+    def compute_writhe_chirality(self, aligned_export=None, **kwargs):
+        from .ae_writhe_chirality import compute_writhe_chirality_per_frame as _compute
+
+        self._print_status("writhe_chirality")
+        return _compute(self, aligned_export=aligned_export, **kwargs)
+
+    def plot_writhe_chirality(self, aligned_export=None, show=True, **kwargs):
+        from .ae_writhe_chirality import (
+            plot_writhe_chirality_distribution as _plot,
+        )
+
+        self._print_status("plot_writhe_chirality")
+        return _plot(self, aligned_export=aligned_export, show=show, **kwargs)
+
+    def encode_datasets(self, **kwargs):
+        from .latent_landscape import encode_datasets as _encode
+
+        self._print_status("encode_datasets")
+        return _encode(self, **kwargs)
+
+    def scan_latent_pairs(self, z_train, z_valid=None, **kwargs):
+        from .latent_landscape import scan_all_pairs as _scan
+
+        self._print_status("scan_latent_pairs")
+        return _scan(self, z_train, z_valid=z_valid, **kwargs)
+
+    def plot_latent_pair_panels(self, scan, z_train, z_valid=None, show=True, **kwargs):
+        from .latent_landscape import plot_latent_pair_panels as _plot
+
+        self._print_status("plot_latent_pair_panels")
+        return _plot(self, scan, z_train, z_valid=z_valid, show=show, **kwargs)
+
+    def plot_latent_pair(self, scan, z_train, z_valid=None, show=True, **kwargs):
+        from .latent_landscape import plot_latent_pair as _plot
+
+        self._print_status("plot_latent_pair")
+        return _plot(self, scan, z_train, z_valid=z_valid, show=show, **kwargs)
+
+    def plot_error_violins(self, show=True, **kwargs):
+        from .latent_landscape import plot_error_violins as _plot
+
+        self._print_status("plot_error_violins")
+        return _plot(self, show=show, **kwargs)
 
     def _print_status(self, stage):
         model_name = (
@@ -760,3 +814,191 @@ class AutoencoderWorkflow:
         print("[decode_structures] wrote Kabsch-aligned multi-MODEL decodes:")
         print(f"  {train_path}  ({decoded_train_aligned.shape[0]} frames)")
         print(f"  {valid_path}  ({decoded_valid_aligned.shape[0]} frames)")
+
+    def _resolve_training_log(self, log_filename="log.dat"):
+        """Return the first existing molearn log under ``self.log_dir``."""
+        candidates = [log_filename]
+        for name in ("log.dat", "log_file.dat"):
+            if name not in candidates:
+                candidates.append(name)
+        for name in candidates:
+            path = os.path.join(self.log_dir, name)
+            if os.path.isfile(path):
+                return path
+        tried = ", ".join(os.path.join(self.log_dir, n) for n in candidates)
+        raise FileNotFoundError(
+            f"Training log not found. Tried: {tried}. Train the model first."
+        )
+
+    def _read_training_log(self, log_file):
+        """Read a molearn ``log.dat``; keep the latest segment if schemas differ."""
+        with open(log_file, "r") as f:
+            raw = [line.rstrip("\n") for line in f if line.strip()]
+        if not raw:
+            raise ValueError(f"Empty log file: {log_file}")
+
+        header_cols = raw[0].split(",")
+        field_counts = [len(line.split(",")) for line in raw[1:]]
+        if not field_counts or all(n == len(header_cols) for n in field_counts):
+            return pd.read_csv(log_file)
+
+        segments = []
+        cur_n, cur_rows = None, []
+        for line, n in zip(raw[1:], field_counts):
+            if n != cur_n:
+                if cur_rows:
+                    segments.append((cur_n, cur_rows))
+                cur_n, cur_rows = n, [line]
+            else:
+                cur_rows.append(line)
+        if cur_rows:
+            segments.append((cur_n, cur_rows))
+
+        latest_n, latest_rows = segments[-1]
+        cols = (
+            header_cols
+            if latest_n == len(header_cols)
+            else [f"col{i}" for i in range(latest_n)]
+        )
+        if latest_n != len(header_cols):
+            print(
+                f"[plot_training_history] WARNING: '{log_file}' has mixed "
+                f"schemas; plotting the latest {latest_n}-field segment."
+            )
+        df = pd.DataFrame([line.split(",") for line in latest_rows], columns=cols)
+        return df.apply(pd.to_numeric, errors="coerce")
+
+    def plot_training_history(
+        self,
+        log_filename="log.dat",
+        output_file="training_history.png",
+        title="Training and Validation Loss Over Time",
+        latest_only=True,
+        show_components=True,
+        show=True,
+        dpi=200,
+    ):
+        """Plot train/valid loss vs epoch from the molearn training log.
+
+        Extra ``train_*_loss`` / ``valid_*_loss`` pairs (writheCH2
+        ``writhe_loss`` and ``dm_loss``) get their own subplots when
+        ``show_components`` is True. Molearn's ``mse_loss`` alias of the
+        total is omitted so CNN2d/Small stay a single panel.
+        """
+        self._print_status("plot_training_history")
+        log_file = self._resolve_training_log(log_filename)
+        log_data = self._read_training_log(log_file)
+        required = {"epoch", "train_loss", "valid_loss"}
+        missing = required.difference(set(log_data.columns))
+        if missing:
+            raise ValueError(
+                f"Missing required columns in {log_file}: {sorted(missing)}. "
+                f"Available: {list(log_data.columns)}"
+            )
+
+        if latest_only and len(log_data) > 1:
+            epoch_vals = log_data["epoch"].to_numpy()
+            reset_points = np.where(np.diff(epoch_vals) < 0)[0]
+            if len(reset_points) > 0:
+                log_data = log_data.iloc[int(reset_points[-1] + 1) :].reset_index(
+                    drop=True
+                )
+
+        component_pairs = []
+        total_pair = None
+        for col in log_data.columns:
+            if not (col.startswith("train_") and col.endswith("_loss")):
+                continue
+            metric = col[len("train_") :]
+            valid_col = f"valid_{metric}"
+            if valid_col not in log_data.columns:
+                continue
+            label = metric[: -len("_loss")] if metric != "loss" else "total"
+            entry = (col, valid_col, label)
+            if metric == "loss":
+                total_pair = entry
+            elif label != "mse":
+                component_pairs.append(entry)
+
+        if show_components and component_pairs:
+            ordered_pairs = component_pairs + ([total_pair] if total_pair else [])
+        else:
+            ordered_pairs = [total_pair] if total_pair else component_pairs[:1]
+        if not ordered_pairs:
+            raise ValueError(f"No train/valid loss pairs found in {log_file}")
+
+        n = len(ordered_pairs)
+        ncols = min(n, 3)
+        nrows = (n + ncols - 1) // ncols
+        fig, axes = plt.subplots(
+            nrows, ncols, figsize=(5.5 * ncols, 4.0 * nrows), squeeze=False
+        )
+        axes_flat = list(axes.flatten())
+        has_writhe_components = any(p[2] in ("writhe", "dm") for p in ordered_pairs)
+
+        for ax, (tcol, vcol, label) in zip(axes_flat, ordered_pairs):
+            tvals = log_data[tcol].to_numpy()
+            vvals = log_data[vcol].to_numpy()
+            ax.plot(
+                log_data["epoch"],
+                tvals,
+                label="Training",
+                linewidth=2,
+                color="tab:blue",
+            )
+            ax.plot(
+                log_data["epoch"],
+                vvals,
+                label="Validation",
+                linewidth=2,
+                color="tab:orange",
+            )
+            combined = np.concatenate([tvals, vvals])
+            combined = combined[np.isfinite(combined) & (combined > 0)]
+            if combined.size > 0 and combined.max() / combined.min() > 10:
+                ax.set_yscale("log")
+            ax.set_xlabel("Epoch", fontsize=11)
+            pretty = label.replace("_", " ")
+            if label == "total":
+                ax.set_ylabel("Total loss", fontsize=11)
+                ax.set_title(
+                    "Total loss (writhe + β · dm)"
+                    if has_writhe_components
+                    else "Total loss",
+                    fontsize=12,
+                    fontweight="bold",
+                )
+            else:
+                ax.set_ylabel(f"{pretty} loss", fontsize=11)
+                ax.set_title(f"{pretty} component", fontsize=12, fontweight="bold")
+            ax.legend(fontsize=10)
+            ax.grid(True, alpha=0.3)
+
+        for ax in axes_flat[len(ordered_pairs) :]:
+            ax.set_visible(False)
+
+        fig.suptitle(title, fontsize=14, fontweight="bold")
+        fig.tight_layout(rect=[0, 0, 1, 0.96])
+
+        save_path = os.path.join(self.output_base_dir, output_file)
+        fig.savefig(save_path, dpi=dpi, bbox_inches="tight")
+        print(f"Saved {save_path}")
+        if show:
+            plt.show()
+        else:
+            plt.close(fig)
+
+        for tcol, vcol, label in ordered_pairs:
+            tag = "Total" if label == "total" else label.replace("_", " ").capitalize()
+            best_idx = log_data[vcol].idxmin()
+            print(
+                f"{tag:>10s}: final train={log_data[tcol].iloc[-1]:.6e}  "
+                f"final valid={log_data[vcol].iloc[-1]:.6e}  "
+                f"best valid={log_data.loc[best_idx, vcol]:.6e} "
+                f"(epoch {int(log_data.loc[best_idx, 'epoch'])})"
+            )
+
+        ret_axes = (
+            axes_flat[0] if len(ordered_pairs) == 1 else axes_flat[: len(ordered_pairs)]
+        )
+        return fig, ret_axes, log_data
